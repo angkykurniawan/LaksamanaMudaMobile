@@ -26,7 +26,7 @@
                 android:layout_height="32dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_back"
+                android:src="@drawable/ic_launcher_foreground"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription" />
@@ -223,7 +223,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_launcher_foreground"
             android:padding="8dp"
             tools:ignore="ContentDescription" />
 
@@ -231,7 +231,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_launcher_foreground"
             android:padding="8dp"
             tools:ignore="ContentDescription" />
 
@@ -247,7 +247,7 @@
                 android:layout_gravity="center"
                 android:background="@drawable/musicfest"
                 android:padding="12dp"
-                android:src="@drawable/ic_back"
+                android:src="@drawable/ic_launcher_foreground"
                 tools:ignore="ContentDescription" />
         </FrameLayout>
 
@@ -255,7 +255,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_launcher_foreground"
             android:padding="8dp"
             tools:ignore="ContentDescription" />
 
@@ -263,7 +263,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_launcher_foreground"
             android:padding="8dp"
             tools:ignore="ContentDescription" />
 
