@@ -3,30 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-    android:id="@+id/nav_home"
-    android:icon="@drawable/ic_launcher_foreground"
-    android:title="Home"
-    app:showAsAction="ifRoom" />
-
-    <item
-    android:id="@+id/nav_team"
-    android:icon="@drawable/ic_group"
-    android:title="Team"
-    app:showAsAction="ifRoom" />
+        android:id="@+id/nav_team"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Team"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/nav_event"
-        android:icon="@drawable/ic_event"
+        android:icon="@drawable/ic_launcher_foreground"
         android:title="Event"
         app:showAsAction="ifRoom" />
+
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Home"
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/nav_ticket"
-        android:icon="@drawable/ic_ticket"
+        android:icon="@drawable/ic_launcher_foreground"
         android:title="Ticket"
         app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/nav_customer"
-        android:icon="@drawable/ic_person"
+        android:icon="@drawable/ic_launcher_foreground"
         android:title="Customer"
         app:showAsAction="ifRoom" />
 </menu>
