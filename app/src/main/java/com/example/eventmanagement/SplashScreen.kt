@@ -34,7 +34,6 @@ class SplashScreen : AppCompatActivity() {
         }
 
         binding.buttonGetStarted.setOnClickListener {
-            // Menggunakan Login::class.java secara eksplisit
             val i = Intent(this@SplashScreen, Login::class.java)
             startActivity(i)
             finish()

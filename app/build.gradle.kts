@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -40,31 +39,12 @@ android {
 }
 
 dependencies {
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-
-    // Firebase Authentication Kotlin SDK
-    implementation("com.google.firebase:firebase-auth-ktx")
-
-    // FIREBASE FIRESTORE
-    implementation("com.google.firebase:firebase-firestore-ktx")
-
-    // Google Play Services
-    implementation("com.google.android.gms:play-services-auth:21.0.0")
-
-    // Firebase Kotlin BOM
-    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
-
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-
-    implementation("com.google.android.material:material:1.x.x")
-    // Ganti 1.x.x dengan versi terbaru, misalnya 'com.google.android.material:material:1.12.0'
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

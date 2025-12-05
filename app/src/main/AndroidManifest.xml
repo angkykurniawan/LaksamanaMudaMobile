@@ -12,33 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EventManagement">
         <activity
-            android:name=".TestFragment"
-            android:exported="false" />
-        <activity
-            android:name=".BottomBar.InsideFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ticket.KategoriTicket"
-            android:exported="false" />
-        <activity
-            android:name=".ticket.TicketHome"
-            android:exported="false" />
-        <activity
-            android:name=".team.TeamHome"
-            android:exported="false" />
-        <activity
-            android:name=".event.EventHome"
-            android:exported="false" />
-        <activity
-            android:name=".customer.CustomerHome"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="true" />
-        <activity
-            android:name=".HomeActivity"
-            android:exported="false" />
-        <activity
             android:name=".Dashboard"
             android:exported="false" />
         <activity
