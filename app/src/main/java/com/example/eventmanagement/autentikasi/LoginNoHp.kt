@@ -1,4 +1,4 @@
-package com.example.eventmanagement // Ganti dengan package Anda
+package com.example.eventmanagement.autentikasi // Ganti dengan package Anda
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

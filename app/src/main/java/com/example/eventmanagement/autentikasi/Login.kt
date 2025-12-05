@@ -1,4 +1,4 @@
-package com.example.eventmanagement // Ganti dengan package Anda
+package com.example.eventmanagement.autentikasi // Ganti dengan package Anda
 
 import android.os.Bundle
 // Pastikan Anda mengimpor MaterialButton jika Anda menggunakannya
@@ -6,6 +6,7 @@ import com.google.android.material.button.MaterialButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.eventmanagement.R
 import com.example.eventmanagement.databinding.ActivityLoginBinding // Ganti ke nama binding Activity container Anda (sebelumnya ActivityLoginBinding)
 
 // HAPUS BARIS YANG ERROR: private var Button.strokeWidth: Int

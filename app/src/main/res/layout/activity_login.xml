@@ -7,7 +7,7 @@
     android:paddingStart="24dp"
     android:paddingEnd="24dp"
     android:paddingTop="24dp"
-    tools:context=".Login">
+    tools:context=".autentikasi.Login">
 
     <ImageView
         android:id="@+id/backButton"
