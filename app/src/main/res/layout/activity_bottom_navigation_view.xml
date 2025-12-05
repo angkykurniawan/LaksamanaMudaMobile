@@ -1,23 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/main_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".bottombar.BottomNavigationView">
 
-    <androidx.fragment.app.FragmentContainerView
+    <!-- FRAME LAYOUT UNTUK MENAMPUNG FRAGMENT -->
+    <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation" />
+        android:layout_height="652dp"
+        android:layout_marginBottom="56dp" /> <!-- Jaga margin dari BottomNav -->
+
+    <!-- BOTTOM NAVIGATION VIEW (4 ITEM + 1 Placeholder) -->
+
+    <!-- FLOATING ACTION BUTTON (FAB) UNTUK ITEM HOME YANG MENONJOL -->
+    <!-- Ikon ini dinaikkan lebih tinggi (35dp) dan menggunakan ikon rumah putih -->
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="#FFE9D7"
+        app:itemIconTint="@color/orange_selector"
+        app:itemTextColor="#A96600"
+        app:labelVisibilityMode="labeled"
+        app:layout_anchor="@+id/fab_home"
+        app:layout_anchorGravity="bottom|center"
         app:menu="@menu/bottom_nav_menu" />
 
-</RelativeLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="35dp"
+        android:backgroundTint="#FFA500"
+        app:tint="@android:color/white"
+        app:srcCompat="@drawable/ic_launcher_foreground"
+        app:maxImageSize="90dp"
+        app:fabSize="normal"
+        android:contentDescription="Tombol Beranda" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

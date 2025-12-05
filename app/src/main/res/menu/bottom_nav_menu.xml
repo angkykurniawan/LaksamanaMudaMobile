@@ -4,32 +4,21 @@
 
     <item
         android:id="@+id/nav_team"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Team"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/ic_launcher_background" android:title="Team" />
 
     <item
         android:id="@+id/nav_event"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Event"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/ic_launcher_background" android:title="Event" />
 
 
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Home"
-        app:showAsAction="ifRoom" />
-
+        android:icon="@drawable/ic_nav_home" />
     <item
         android:id="@+id/nav_ticket"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Ticket"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/ic_launcher_background" android:title="Ticket" />
 
     <item
         android:id="@+id/nav_customer"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Customer"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/ic_launcher_background" android:title="Customer" />
 </menu>
