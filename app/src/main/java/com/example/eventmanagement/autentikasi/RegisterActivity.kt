@@ -13,17 +13,8 @@ import com.example.eventmanagement.supabase.SupabaseService
 import com.example.eventmanagement.supabase.User
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
-
-// ==========================================================
-// SKELETON: Ganti dengan kelas LoginActivity Anda yang sebenarnya!
-class LoginActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Toast.makeText(this, "Berhasil Daftar. Silakan masuk!", Toast.LENGTH_LONG).show()
-    }
-}
-// ==========================================================
-
+import java.security.MessageDigest
+import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -42,51 +33,29 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate START")
-
         setContentView(R.layout.activity_register)
-        Log.d(TAG, "Layout SET")
 
-        try {
-            initViews()
-            Log.d(TAG, "initViews COMPLETE")
-            setupListeners()
-            Log.d(TAG, "Listeners COMPLETE")
-
-            btnRegister.text = "Register"
-        } catch (e: Exception) {
-            // Log error eksplisit jika crash di inisialisasi View (NPE)
-            Log.e(TAG, "FATAL VIEW INITIALIZATION ERROR: ${e.message}", e)
-            Toast.makeText(this, "Aplikasi mengalami kegagalan inisialisasi. Cek Logcat!", Toast.LENGTH_LONG).show()
-            // Sangat penting untuk melempar error agar kita melihat stack trace penuh
-            throw e
-        }
+        initViews()
+        setupListeners()
     }
 
     private fun initViews() {
-        // Deklarasi View - PASTIKAN ID INI 100% SESUAI DENGAN XML
         etUsername = findViewById(R.id.et_username)
         etEmail = findViewById(R.id.et_email)
         etPhone = findViewById(R.id.et_phone)
         etPassword = findViewById(R.id.et_password)
         etConfirmPassword = findViewById(R.id.et_confirm_password)
 
-        btnRegister = findViewById<Button>(R.id.btn_register)
+        btnRegister = findViewById(R.id.btn_register)
         btnBack = findViewById(R.id.btn_back)
     }
 
     private fun setupListeners() {
-        btnRegister.setOnClickListener {
-            handleRegisterClick()
-        }
-        btnBack.setOnClickListener {
-            finish()
-        }
+        btnRegister.setOnClickListener { handleRegisterClick() }
+        btnBack.setOnClickListener { finish() }
     }
 
     private fun handleRegisterClick() {
-        Log.d(TAG, "Register Clicked: START")
-
         val username = etUsername.text.toString().trim()
         val email = etEmail.text.toString().trim()
         val phone = etPhone.text.toString().trim()
@@ -94,35 +63,53 @@ class RegisterActivity : AppCompatActivity() {
         val confirmPassword = etConfirmPassword.text.toString()
         var isValid = true
 
-        // ... (Validasi kolom kosong dan password cocok) ...
-
-        if (username.isEmpty()) { etUsername.error = "Nama pengguna wajib diisi"; isValid = false }
+        // ✅ Validasi kosong
+        if (username.isEmpty()) { etUsername.error = "Nama wajib diisi"; isValid = false }
         if (email.isEmpty()) { etEmail.error = "Email wajib diisi"; isValid = false }
         if (phone.isEmpty()) { etPhone.error = "Nomor HP wajib diisi"; isValid = false }
-        if (password.isEmpty()) { etPassword.error = "Kata sandi wajib diisi"; isValid = false }
+        if (password.isEmpty()) { etPassword.error = "Password wajib diisi"; isValid = false }
         if (confirmPassword.isEmpty()) { etConfirmPassword.error = "Konfirmasi wajib diisi"; isValid = false }
-        if (password.isNotEmpty() && password != confirmPassword) {
-            etConfirmPassword.error = "Kata sandi tidak cocok"
+
+        // ✅ Validasi format email
+        if (email.isNotEmpty() && !isValidEmail(email)) {
+            etEmail.error = "Format email tidak valid"
+            isValid = false
+        }
+
+        // ✅ Nomor HP hanya angka
+        if (phone.isNotEmpty() && !phone.matches(Regex("^[0-9]+$"))) {
+            etPhone.error = "Nomor HP hanya boleh angka"
+            isValid = false
+        }
+
+        // ✅ Password HARUS lebih dari 8 karakter (minimal 9)
+        if (password.length <= 8) {
+            etPassword.error = "Password minimal 9 karakter"
+            isValid = false
+        }
+
+        // ✅ Konfirmasi password harus sama
+        if (password != confirmPassword) {
+            etConfirmPassword.error = "Konfirmasi password tidak cocok"
             isValid = false
         }
 
         if (!isValid) {
-            Log.w(TAG, "Validasi gagal. Pendaftaran dibatalkan.")
+            Log.w(TAG, "Validasi gagal")
             return
         }
 
-        // Membuat objek User
+        // ✅ Hash password
+        val hashedPassword = hashPassword(password)
+
         val newUser = User(
             name = username,
             email = email,
             phone = phone,
-            password = password,
+            password = hashedPassword,
             is_verified = "false"
         )
 
-        Log.d(TAG, "Attempting registration for user: $email")
-
-        // Melakukan operasi jaringan di Coroutine
         lifecycleScope.launch {
             btnRegister.isEnabled = false
 
@@ -131,20 +118,38 @@ class RegisterActivity : AppCompatActivity() {
             btnRegister.isEnabled = true
 
             result.onSuccess {
-                Log.i(TAG, "Pendaftaran berhasil!")
-                Toast.makeText(this@RegisterActivity, "Pendaftaran Berhasil! Silakan masuk.", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@RegisterActivity,
+                    "Pendaftaran berhasil!",
+                    Toast.LENGTH_LONG
+                ).show()
 
-                // Navigasi ke Halaman Login
-                val intent = Intent(this@RegisterActivity, Login::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
+                startActivity(
+                    Intent(this@RegisterActivity, Login::class.java)
+                )
                 finish()
-
             }.onFailure { error ->
-                val errorMessage = error.message ?: "Terjadi kesalahan jaringan atau database."
-                Toast.makeText(this@RegisterActivity, "Pendaftaran Gagal: ${errorMessage}", Toast.LENGTH_LONG).show()
-                Log.e(TAG, "Register Failed: ${errorMessage}", error)
+                Toast.makeText(
+                    this@RegisterActivity,
+                    "Gagal: ${error.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
+    }
+
+    // ✅ VALIDASI FORMAT EMAIL
+    private fun isValidEmail(email: String): Boolean {
+        val emailPattern =
+            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$"
+        return Pattern.compile(emailPattern).matcher(email).matches()
+    }
+
+    // ✅ HASH PASSWORD SHA-256
+    private fun hashPassword(password: String): String {
+        val bytes = password.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        return digest.joinToString("") { "%02x".format(it) }
     }
 }
