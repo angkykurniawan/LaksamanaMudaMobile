@@ -61,6 +61,12 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.4")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
+
+    // Event
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

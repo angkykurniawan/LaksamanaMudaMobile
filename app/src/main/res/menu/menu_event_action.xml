@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_crew" android:title="Crew"/>
+    <item android:id="@+id/action_notification" android:title="Notification"/>
+    <item android:id="@+id/action_documentation" android:title="Documentation"/>
+    <item android:id="@+id/action_engagement" android:title="Engagement"/>
+    <item android:id="@+id/action_edit" android:title="Edit"/>
+    <item android:id="@+id/action_delete" android:title="Delete"/>
+</menu>
