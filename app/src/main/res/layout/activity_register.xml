@@ -104,8 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
-                android:inputType="textEmailAddress"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:inputType="text" /> </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -118,8 +117,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nomor HP"
-                android:inputType="phone"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:inputType="text" /> </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -154,8 +153,7 @@
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Update"
-            android:textSize="18sp"
+            android:text="Register" android:textSize="18sp"
             android:textColor="@android:color/white"
             android:backgroundTint="#FF9800"
             android:minHeight="56dp"

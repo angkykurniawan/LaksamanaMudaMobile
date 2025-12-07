@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EventManagement">
         <activity
-            android:name=".autentikasi.RegisterActivity"
+            android:name=".bottombar.BottomNavigationView"
             android:exported="false" />
         <activity
             android:name=".SplashScreen"
@@ -29,7 +29,7 @@
             android:name=".MainActivity"
             android:exported="true" />
         <activity
-            android:name=".bottombar.BottomNavigationView"
+            android:name=".autentikasi.RegisterActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

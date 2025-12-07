@@ -1,4 +1,4 @@
-package com.example.eventmanagement.autentikasi.supabase
+package com.example.eventmanagement.supabase
 
 import kotlinx.serialization.Serializable
 
@@ -8,5 +8,6 @@ data class User(
     val email: String,
     val phone: String,
     val password: String,
-    val is_verified: Boolean = false,
+    // Diubah kembali ke String agar cocok dengan kolom database Anda
+    val is_verified: String = "false"
 )

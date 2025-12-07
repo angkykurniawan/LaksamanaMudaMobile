@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.22"
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -40,9 +40,28 @@ android {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.0.0")
+//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+//    implementation("io.github.jan-tennert.supabase:postgrest-kt:1.4.1")
+//    implementation("io.github.jan-tennert.supabase:supabase-kt:1.4.1")
+//    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("com.google.android.material:material:1.11.0")
+//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+//    implementation("io.ktor:ktor-client-android:2.3.8")
+//    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.8")
+//    implementation("io.ktor:ktor-client-content-negotiation:2.3.8")
+//    implementation("io.github.jan-tennert.supabase:gotrue-kt:1.4.1")
+
+    implementation("io.github.jan-tennert.supabase:supabase-kt:1.4.1")
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:1.4.1")
+    implementation("io.github.jan-tennert.supabase:gotrue-kt:1.4.1")
+
+    implementation("io.ktor:ktor-client-android:2.2.4")
+    implementation("io.ktor:ktor-client-content-negotiation:2.2.4")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.4")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
