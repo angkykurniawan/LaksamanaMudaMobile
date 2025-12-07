@@ -35,12 +35,53 @@ class EventViewModel : ViewModel() {
 
     // Fungsi Dummy Data
     private fun createDummyEvents(): List<Event> {
-        // Anda perlu memastikan R.drawable.poster_music, dll. tersedia di folder res/drawable
+        // PERBAIKAN: Menggunakan format ISO 8601 lengkap (String)
+        val isoFormatTime = "T00:00:00.000Z"
+
+        // Asumsi: Kita menggunakan URL gambar dummy karena 'poster' sekarang String.
+        val dummyImageUrl = "https://example.com/images/poster_fight.jpg"
+
         return listOf(
-            Event(1, "Music Festival Laksamana Muda 2025", "19 Desember 2025", "Rp. 175.000 - 300.000", R.drawable.fight, "Upcoming"),
-            Event(2, "HALLOWEEN Karaoke Night", "24 Oktober 2025", "Rp. 50.000", R.drawable.fight, "Upcoming"),
-            Event(3, "Jazz on the Beach", "15 Juli 2025", "Rp. 100.000", R.drawable.fight, "Pending"),
-            Event(4, "New Year Party 2024", "31 Desember 2024", "Gratis", R.drawable.fight, "History")
+            Event(
+                id = 1,
+                name = "Music Festival Laksamana Muda 2025",
+                status = "Upcoming",
+                description = "Festival musik outdoor terbesar tahun ini di Pekanbaru.",
+                price = "Rp. 175.000 - 300.000",
+                // KOREKSI: Menggunakan String (URL) untuk poster
+                poster = dummyImageUrl,
+                date = "2025-12-19$isoFormatTime"
+            ),
+            Event(
+                id = 2,
+                name = "HALLOWEEN Karaoke Night",
+                status = "Upcoming",
+                description = "Malam karaoke bertema horor dengan hadiah kostum terbaik.",
+                price = "Rp. 50.000",
+                // KOREKSI: Menggunakan String (URL) untuk poster
+                poster = dummyImageUrl,
+                date = "2025-10-24$isoFormatTime"
+            ),
+            Event(
+                id = 3,
+                name = "Jazz on the Beach",
+                status = "Pending",
+                description = "Sesi jazz santai di tepi pantai yang indah.",
+                price = "Rp. 100.000",
+                // KOREKSI: Menggunakan String (URL) untuk poster
+                poster = dummyImageUrl,
+                date = "2025-07-15$isoFormatTime"
+            ),
+            Event(
+                id = 4,
+                name = "New Year Party 2024",
+                status = "History",
+                description = "Pesta perayaan tahun baru spektakuler.",
+                price = "Gratis",
+                // KOREKSI: Menggunakan String (URL) untuk poster
+                poster = dummyImageUrl,
+                date = "2024-12-31$isoFormatTime"
+            )
         )
     }
 }
