@@ -7,6 +7,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.eventmanagement.R
 import com.example.eventmanagement.databinding.ActivityBottomNavigationViewBinding
+import com.example.eventmanagement.event.EventManagementFragment
 
 // Asumsi: Semua Fragment ini (HomeFragment, TeamFragment, dll.) sudah didefinisikan dengan benar
 // dalam paket com.example.eventmanagement.bottombar
@@ -52,7 +53,7 @@ class BottomNavigationView : AppCompatActivity() {
                     true
                 }
                 R.id.nav_event -> {
-                    replaceFragment(EventFragment())
+                    replaceFragment(EventManagementFragment())
                     true
                 }
                 R.id.nav_ticket -> {
