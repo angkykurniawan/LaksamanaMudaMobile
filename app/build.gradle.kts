@@ -40,28 +40,20 @@ android {
 }
 
 dependencies {
-//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-//    implementation("io.github.jan-tennert.supabase:postgrest-kt:1.4.1")
-//    implementation("io.github.jan-tennert.supabase:supabase-kt:1.4.1")
-//    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("com.google.android.material:material:1.11.0")
-//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
-//    implementation("io.ktor:ktor-client-android:2.3.8")
-//    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.8")
-//    implementation("io.ktor:ktor-client-content-negotiation:2.3.8")
-//    implementation("io.github.jan-tennert.supabase:gotrue-kt:1.4.1")
-
+    // SUPABASE & NETWORKING
     implementation("io.github.jan-tennert.supabase:supabase-kt:1.4.1")
     implementation("io.github.jan-tennert.supabase:postgrest-kt:1.4.1")
     implementation("io.github.jan-tennert.supabase:gotrue-kt:1.4.1")
 
-    implementation("io.ktor:ktor-client-android:2.2.4")
-    implementation("io.ktor:ktor-client-content-negotiation:2.2.4")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.4")
+    // GANTI SEMUA VERSI KTOR KE VERSI TERBARU YANG SESUAI (misal: 2.3.8)
+    implementation("io.ktor:ktor-client-android:2.3.8")
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.8")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.8")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    // Gunakan versi JSON terbaru yang kompatibel dengan Ktor 2.3.8
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3") // Naikkan dari 1.5.1
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // Event
     implementation("androidx.fragment:fragment-ktx:1.6.2")
@@ -71,6 +63,10 @@ dependencies {
     // Gambar String
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+
+    // DEPENDENCY TAMBAHAN YANG DISARANKAN UNTUK KOMPONEN UI
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.cardview:cardview:1.0.0")
     
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
