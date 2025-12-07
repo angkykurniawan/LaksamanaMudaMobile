@@ -52,7 +52,7 @@ class NavigationFragment : Fragment() {
 
         // Reset semua gaya
         listOf(btnUpcoming, btnPending, btnHistory).forEach { button ->
-            button.setBackgroundResource(R.drawable.home_white)
+            button.setBackgroundResource(R.drawable.home)
             button.setTextColor(ContextCompat.getColor(context, android.R.color.black))
         }
 
@@ -65,7 +65,7 @@ class NavigationFragment : Fragment() {
     }
 
     private fun setButtonStyleActive(button: Button, context: android.content.Context) {
-        button.setBackgroundResource(R.drawable.home_white)
+        button.setBackgroundResource(R.drawable.home)
         button.setTextColor(ContextCompat.getColor(context, android.R.color.white))
     }
 }

@@ -40,10 +40,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
         android:layout_marginBottom="35dp"
-        android:backgroundTint="#FFA500"
+        android:backgroundTint="@color/orange_selector"
         app:tint="@android:color/white"
-        app:srcCompat="@drawable/ic_launcher_foreground"
-        app:maxImageSize="90dp"
+        app:srcCompat="@drawable/ic_home_buttons"
+        app:maxImageSize="45dp"
         app:fabSize="normal"
         android:contentDescription="Tombol Beranda" />
 
