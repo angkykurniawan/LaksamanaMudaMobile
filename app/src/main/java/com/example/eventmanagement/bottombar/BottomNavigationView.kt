@@ -2,87 +2,53 @@ package com.example.eventmanagement.bottombar
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.eventmanagement.R
-import com.example.eventmanagement.databinding.ActivityBottomNavigationViewBinding
+import com.example.eventmanagement.customer.CustomerEngagementFragment
 import com.example.eventmanagement.event.EventManagementFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-// Asumsi: Semua Fragment ini (HomeFragment, TeamFragment, dll.) sudah didefinisikan dengan benar
-// dalam paket com.example.eventmanagement.bottombar
 class BottomNavigationView : AppCompatActivity() {
 
-    private lateinit var binding: ActivityBottomNavigationViewBinding
+    private lateinit var bottomNav: BottomNavigationView
+    private lateinit var fabHome: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Pastikan nama file layout yang benar adalah activity_bottom_navigation_view.xml
-        binding = ActivityBottomNavigationViewBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_bottom_navigation_view)
 
-        // Listener untuk insets sistem (UI/StatusBar)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        bottomNav = findViewById(R.id.bottom_navigation)
+        fabHome = findViewById(R.id.fab_home)
 
-        // Tentukan HomeFragment sebagai tampilan awal saat aplikasi pertama kali dibuka
+        // Set fragment default saat aplikasi pertama kali dibuka
         if (savedInstanceState == null) {
-            replaceFragment(HomeFragment())
-
-            // --- PERBAIKAN UTAMA DI SINI ---
-            // Menggunakan setSelectedItemId untuk memaksa BottomNavigationView memilih item placeholder Home.
-            // Ini akan menonaktifkan sorotan default pada item pertama (Team).
-            binding.bottomNavigation.setSelectedItemId(R.id.nav_home)
+            replaceFragment(CustomerEngagementFragment())
+            bottomNav.selectedItemId = R.id.nav_customer
         }
 
-        // 1. LISTENER UNTUK FLOATING ACTION BUTTON (FAB)
-        binding.fabHome.setOnClickListener {
+        // Listener FAB Home
+        fabHome.setOnClickListener {
             replaceFragment(HomeFragment())
-            // Pastikan item placeholder/home di BottomNav ditandai seolah-olah terpilih
-            binding.bottomNavigation.menu.findItem(R.id.nav_home)?.isChecked = true
+            bottomNav.menu.findItem(R.id.nav_home).isChecked = true
         }
 
-        // 2. LISTENER UNTUK ITEM BOTTOM NAVIGATION (4 item + 1 Placeholder)
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
+        // Listener BottomNavigation
+        bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_team -> {
-                    replaceFragment(TeamFragment())
-                    true
-                }
-                R.id.nav_event -> {
-                    replaceFragment(EventManagementFragment())
-                    true
-                }
-                R.id.nav_ticket -> {
-                    replaceFragment(TicketFragment())
-                    true
-                }
-                R.id.nav_customer -> {
-                    replaceFragment(CustomerFragment())
-                    true
-                }
-                R.id.nav_home -> {
-                    // Ketika item placeholder Home di BottomNav diklik,
-                    // kita navigasi ke HomeFragment (melalui FAB)
-                    binding.fabHome.performClick()
-                    false // Return false agar efek klik tidak berlebihan di BottomNav
-                }
-                else -> false
+                R.id.nav_team -> replaceFragment(TeamFragment())
+                R.id.nav_event -> replaceFragment(EventManagementFragment())
+                R.id.nav_ticket -> replaceFragment(TicketFragment())
+                R.id.nav_customer -> replaceFragment(CustomerEngagementFragment())
+                R.id.nav_home -> fabHome.performClick()
             }
+            true
         }
     }
 
-    /**
-     * Fungsi helper untuk mengganti Fragment yang ditampilkan.
-     * @param fragment Fragment yang akan ditampilkan (harus dari androidx.fragment.app.Fragment).
-     */
     private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(binding.fragmentContainer.id, fragment)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
             .commit()
     }
 }

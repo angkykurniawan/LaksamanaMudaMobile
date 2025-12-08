@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="#FFF3E0">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Prediksi Customer Engagement"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#E65100"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp"/>
+
+        <EditText
+            android:id="@+id/etKategori"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Kategori Tiket"
+            android:backgroundTint="#FB8C00"/>
+
+        <EditText
+            android:id="@+id/etJumlah"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Jumlah Tiket"
+            android:inputType="number"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#FB8C00"/>
+
+        <EditText
+            android:id="@+id/etSumberInfo"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Sumber Info"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#FB8C00"/>
+
+        <Button
+            android:id="@+id/btnPrediksi"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="PREDIKSI"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#F57C00"
+            android:layout_marginTop="24dp"/>
+
+        <TextView
+            android:id="@+id/tvHasil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#E65100"
+            android:gravity="center"
+            android:text="Hasil prediksi muncul di sini"/>
+
+    </LinearLayout>
+</ScrollView>

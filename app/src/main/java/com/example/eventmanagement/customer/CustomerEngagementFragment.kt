@@ -1,17 +1,17 @@
 package com.example.eventmanagement.customer
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.activity.enableEdgeToEdge
+import androidx.fragment.app.Fragment
 import com.example.eventmanagement.R
-
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +25,6 @@ import java.io.IOException
 // ===============================
 // 1. DATA MODEL REQUEST & RESPONSE
 // ===============================
-
 data class TicketRequest(
     val kategori_tiket: String,
     val jumlah_tiket: Int,
@@ -41,42 +40,46 @@ data class PredictionResponse(
 )
 
 // ===============================
-// 2. ACTIVITY IMPLEMENTATION
+// 2. FRAGMENT IMPLEMENTATION
 // ===============================
-
-class CustomerEngagement : AppCompatActivity() {
+class CustomerEngagementFragment : Fragment() {
 
     private val client = OkHttpClient()
     private val gson = Gson()
     private val JSON = "application/json; charset=utf-8".toMediaType()
-
-    // ✅ GANTI SESUAI URL NGROK AKTIF KAMU
     private val PUBLIC_URL = "https://f0ee0199aa2e.ngrok-free.app"
     private val URL = "$PUBLIC_URL/predict"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_customer_engagement)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_customer_engagement, container, false)
 
-        val mainLayout = findViewById<View>(R.id.main)
-        if (mainLayout != null) {
-            ViewCompat.setOnApplyWindowInsetsListener(mainLayout) { v, insets ->
-                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-                insets
-            }
+        // Apply edge-to-edge padding
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
         }
 
         // ===============================
         // BINDING UI
         // ===============================
+        val etKategori = view.findViewById<EditText>(R.id.etKategori)
+        val etJumlah = view.findViewById<EditText>(R.id.etJumlah)
+        val etSumberInfo = view.findViewById<EditText>(R.id.etSumberInfo)
+        val btnPrediksi = view.findViewById<Button>(R.id.btnPrediksi)
+        val tvHasil = view.findViewById<TextView>(R.id.tvHasil)
 
-        val etKategori = findViewById<EditText>(R.id.etKategori)
-        val etJumlah = findViewById<EditText>(R.id.etJumlah)
-        val etSumberInfo = findViewById<EditText>(R.id.etSumberInfo)
-        val btnPrediksi = findViewById<Button>(R.id.btnPrediksi)
-        val tvHasil = findViewById<TextView>(R.id.tvHasil)
+        // Scrollable TextView
+        tvHasil.apply {
+            isVerticalScrollBarEnabled = true
+            setTextIsSelectable(true)
+            typeface = android.graphics.Typeface.MONOSPACE
+            setLineSpacing(2f, 1.0f)
+        }
 
         btnPrediksi.setOnClickListener {
             val kategori = etKategori.text.toString().trim()
@@ -84,7 +87,7 @@ class CustomerEngagement : AppCompatActivity() {
             val sumberInfo = etSumberInfo.text.toString().trim()
 
             if (kategori.isEmpty() || jumlahString.isEmpty() || sumberInfo.isEmpty()) {
-                Toast.makeText(this, "Semua input wajib diisi.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Semua input wajib diisi.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -93,25 +96,21 @@ class CustomerEngagement : AppCompatActivity() {
                 jumlah = jumlahString.toInt()
                 if (jumlah <= 0) throw NumberFormatException()
             } catch (e: NumberFormatException) {
-                Toast.makeText(this, "Jumlah tiket harus angka positif.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Jumlah tiket harus angka positif.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val requestPayload = TicketRequest(
-                kategori_tiket = kategori,
-                jumlah_tiket = jumlah,
-                sumber_info = sumberInfo
-            )
-
-            tvHasil.text = "Memuat prediksi... ⏳"
+            val requestPayload = TicketRequest(kategori, jumlah, sumberInfo)
+            tvHasil.text = "⏳ Memuat prediksi..."
             makePrediction(requestPayload, tvHasil)
         }
+
+        return view
     }
 
     // ===============================
     // 3. FUNGSI HIT NETWORK
     // ===============================
-
     private fun makePrediction(payload: TicketRequest, tvHasil: TextView) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -130,31 +129,29 @@ class CustomerEngagement : AppCompatActivity() {
                         if (response.isSuccessful && responseBody != null) {
                             try {
                                 val prediction = gson.fromJson(responseBody, PredictionResponse::class.java)
-
-                                val resultText = """
-                                    ✅ Prediksi Berhasil:
-                                    Kategori: ${prediction.kategori_tiket ?: "-"}
-                                    Sumber Info: ${prediction.sumber_info ?: "-"}
-                                    Jumlah Tiket: ${prediction.jumlah_tiket ?: "-"}
-                                    Cluster: ${prediction.cluster ?: "-"}
-                                    Engagement Level: ${prediction.engagement_level ?: "-"}
-                                """.trimIndent()
-
+                                val resultText = buildString {
+                                    append("✅ Prediksi Customer Engagement\n\n")
+                                    append(String.format("• %-20s: %s\n", "Kategori Tiket", prediction.kategori_tiket ?: "-"))
+                                    append(String.format("• %-20s: %s\n", "Sumber Info", prediction.sumber_info ?: "-"))
+                                    append(String.format("• %-20s: %s\n", "Jumlah Tiket", prediction.jumlah_tiket ?: "-"))
+                                    append(String.format("• %-20s: %s\n", "Cluster", prediction.cluster ?: "-"))
+                                    append(String.format("• %-20s: %s\n", "Engagement Level", prediction.engagement_level ?: "-"))
+                                }
                                 tvHasil.text = resultText
                             } catch (e: Exception) {
-                                tvHasil.text = "Gagal membaca respon server."
-                                Toast.makeText(this@CustomerEngagement, "JSON Error", Toast.LENGTH_LONG).show()
+                                tvHasil.text = "⚠️ Gagal membaca respon server."
+                                Toast.makeText(requireContext(), "JSON Error", Toast.LENGTH_LONG).show()
                             }
                         } else {
-                            tvHasil.text = "API Error: ${response.code}"
-                            Toast.makeText(this@CustomerEngagement, "Server Error ${response.code}", Toast.LENGTH_LONG).show()
+                            tvHasil.text = "⚠️ API Error: ${response.code}"
+                            Toast.makeText(requireContext(), "Server Error ${response.code}", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) {
-                    tvHasil.text = "Gagal terhubung ke server"
-                    Toast.makeText(this@CustomerEngagement, "Jaringan Bermasalah", Toast.LENGTH_LONG).show()
+                    tvHasil.text = "⚠️ Gagal terhubung ke server"
+                    Toast.makeText(requireContext(), "Jaringan bermasalah", Toast.LENGTH_LONG).show()
                 }
             }
         }

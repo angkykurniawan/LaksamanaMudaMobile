@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EventManagement">
         <activity
-            android:name=".bottombar.BottomNavigationView"
+            android:name=".customer.CustomerEngagement"
             android:exported="false" />
         <activity
             android:name=".autentikasi.RegisterActivity"
@@ -32,7 +32,7 @@
             android:name=".MainActivity"
             android:exported="true" />
         <activity
-            android:name=".customer.CustomerEngagement"
+            android:name=".bottombar.BottomNavigationView"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
