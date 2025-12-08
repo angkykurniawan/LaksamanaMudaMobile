@@ -1,7 +1,7 @@
 package com.example.eventmanagement.customer
 
 import android.os.Bundle
-import android.view.View // Import ini untuk tipe View generik
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.activity.enableEdgeToEdge
-import com.example.eventmanagement.R // Pastikan ini mengarah ke file R yang benar
+import com.example.eventmanagement.R
 
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -22,43 +22,44 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
-// --- 1. MODEL DATA ---
+// ===============================
+// 1. DATA MODEL REQUEST & RESPONSE
+// ===============================
 
 data class TicketRequest(
     val kategori_tiket: String,
-    val jumlah_tiket: Int
+    val jumlah_tiket: Int,
+    val sumber_info: String
 )
 
 data class PredictionResponse(
     val cluster: Int?,
     val engagement_level: String?,
     val jumlah_tiket: Double?,
-    val kategori_tiket: String?
+    val kategori_tiket: String?,
+    val sumber_info: String?
 )
 
-// --- 2. ACTIVITY IMPLEMENTATION ---
+// ===============================
+// 2. ACTIVITY IMPLEMENTATION
+// ===============================
 
 class CustomerEngagement : AppCompatActivity() {
 
-    // Inisialisasi global untuk OkHttp dan Gson
     private val client = OkHttpClient()
     private val gson = Gson()
     private val JSON = "application/json; charset=utf-8".toMediaType()
 
-    // Ganti dengan URL ngrok Anda yang sebenarnya
-    private val PUBLIC_URL = "https://39baec8a35f7.ngrok-free.app/"
-    private val URL = PUBLIC_URL + "/predict"
+    // ✅ GANTI SESUAI URL NGROK AKTIF KAMU
+    private val PUBLIC_URL = "https://f0ee0199aa2e.ngrok-free.app"
+    private val URL = "$PUBLIC_URL/predict"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_customer_engagement)
 
-        // Penyesuaian Insets
-        // FIX: Menggunakan View generik untuk menghindari ClassCastException dan memastikan ID main ada.
         val mainLayout = findViewById<View>(R.id.main)
-
-        // Binding Insets hanya jika mainLayout ditemukan
         if (mainLayout != null) {
             ViewCompat.setOnApplyWindowInsetsListener(mainLayout) { v, insets ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -67,22 +68,23 @@ class CustomerEngagement : AppCompatActivity() {
             }
         }
 
-
-        // --- BINDING UI BARU ---
+        // ===============================
+        // BINDING UI
+        // ===============================
 
         val etKategori = findViewById<EditText>(R.id.etKategori)
         val etJumlah = findViewById<EditText>(R.id.etJumlah)
+        val etSumberInfo = findViewById<EditText>(R.id.etSumberInfo)
         val btnPrediksi = findViewById<Button>(R.id.btnPrediksi)
         val tvHasil = findViewById<TextView>(R.id.tvHasil)
 
         btnPrediksi.setOnClickListener {
-            // 1. Ambil Input
             val kategori = etKategori.text.toString().trim()
             val jumlahString = etJumlah.text.toString().trim()
+            val sumberInfo = etSumberInfo.text.toString().trim()
 
-            // 2. Validasi Input
-            if (kategori.isEmpty() || jumlahString.isEmpty()) {
-                Toast.makeText(this, "Mohon lengkapi semua kolom input.", Toast.LENGTH_SHORT).show()
+            if (kategori.isEmpty() || jumlahString.isEmpty() || sumberInfo.isEmpty()) {
+                Toast.makeText(this, "Semua input wajib diisi.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -91,25 +93,26 @@ class CustomerEngagement : AppCompatActivity() {
                 jumlah = jumlahString.toInt()
                 if (jumlah <= 0) throw NumberFormatException()
             } catch (e: NumberFormatException) {
-                Toast.makeText(this, "Jumlah tiket harus berupa angka positif.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Jumlah tiket harus angka positif.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // 3. Persiapan Request
-            val requestPayload = TicketRequest(kategori, jumlah)
+            val requestPayload = TicketRequest(
+                kategori_tiket = kategori,
+                jumlah_tiket = jumlah,
+                sumber_info = sumberInfo
+            )
 
-            // Tampilkan pesan loading
             tvHasil.text = "Memuat prediksi... ⏳"
-
-            // 4. Eksekusi Jaringan (Menggunakan Coroutines)
             makePrediction(requestPayload, tvHasil)
         }
     }
 
-    // --- 3. FUNGSI JARINGAN ---
+    // ===============================
+    // 3. FUNGSI HIT NETWORK
+    // ===============================
 
     private fun makePrediction(payload: TicketRequest, tvHasil: TextView) {
-        // CoroutineScope yang terikat pada IO Dispatcher untuk operasi jaringan
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val jsonPayload = gson.toJson(payload)
@@ -123,30 +126,35 @@ class CustomerEngagement : AppCompatActivity() {
                 client.newCall(request).execute().use { response ->
                     val responseBody = response.body?.string()
 
-                    // Pindah ke Main Thread untuk update UI
                     withContext(Dispatchers.Main) {
                         if (response.isSuccessful && responseBody != null) {
                             try {
                                 val prediction = gson.fromJson(responseBody, PredictionResponse::class.java)
 
-                                val resultText = "✅ Prediksi Berhasil:\n" +
-                                        "Level Engagement: ${prediction.engagement_level ?: "N/A"}\n" +
-                                        "Cluster Pelanggan: ${prediction.cluster ?: "N/A"}"
+                                val resultText = """
+                                    ✅ Prediksi Berhasil:
+                                    Kategori: ${prediction.kategori_tiket ?: "-"}
+                                    Sumber Info: ${prediction.sumber_info ?: "-"}
+                                    Jumlah Tiket: ${prediction.jumlah_tiket ?: "-"}
+                                    Cluster: ${prediction.cluster ?: "-"}
+                                    Engagement Level: ${prediction.engagement_level ?: "-"}
+                                """.trimIndent()
+
                                 tvHasil.text = resultText
                             } catch (e: Exception) {
-                                tvHasil.text = "Error: Respon diterima (Status ${response.code}), tapi gagal memproses data."
-                                Toast.makeText(this@CustomerEngagement, "Gagal memproses data JSON.", Toast.LENGTH_LONG).show()
+                                tvHasil.text = "Gagal membaca respon server."
+                                Toast.makeText(this@CustomerEngagement, "JSON Error", Toast.LENGTH_LONG).show()
                             }
                         } else {
-                            tvHasil.text = "Error: Gagal menghubungi API. Status ${response.code}. Cek ngrok URL."
-                            Toast.makeText(this@CustomerEngagement, "Gagal: Status ${response.code}", Toast.LENGTH_LONG).show()
+                            tvHasil.text = "API Error: ${response.code}"
+                            Toast.makeText(this@CustomerEngagement, "Server Error ${response.code}", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) {
-                    tvHasil.text = "Error Jaringan: Gagal terhubung ke server."
-                    Toast.makeText(this@CustomerEngagement, "Error Jaringan: ${e.message}", Toast.LENGTH_LONG).show()
+                    tvHasil.text = "Gagal terhubung ke server"
+                    Toast.makeText(this@CustomerEngagement, "Jaringan Bermasalah", Toast.LENGTH_LONG).show()
                 }
             }
         }
