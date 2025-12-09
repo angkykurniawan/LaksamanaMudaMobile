@@ -14,9 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EventManagement">
         <activity
-            android:name=".customer.CustomerEngagement"
-            android:exported="false" />
-        <activity
             android:name=".autentikasi.RegisterActivity"
             android:exported="false" />
         <activity
