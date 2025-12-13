@@ -1,79 +1,94 @@
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
-    app:cardCornerRadius="10dp"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="8dp"
     app:cardElevation="4dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:padding="16dp">
 
         <ImageView
-            android:id="@+id/img_event_poster"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
+            android:id="@+id/ivPoster"
+            android:layout_width="84dp"
+            android:layout_height="127dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_foreground"
-            android:contentDescription="Poster Event"/>
+            android:src="@drawable/fight"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvEventName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:padding="12dp">
+            android:layout_marginStart="16dp"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivPoster"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Music Festival Laksamana Muda 2025" />
 
-            <TextView
-                android:id="@+id/tv_event_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Music Festival Laksamana Muda 2025"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/tvPriceRange"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            android:drawableStart="@drawable/ic_price"
+            android:drawablePadding="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvEventName"
+            app:layout_constraintTop_toBottomOf="@id/tvEventName"
+            tools:text="Rp. 175.000 - 300.000" />
 
-            <TextView
-                android:id="@+id/tv_event_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🗓 19 Desember 2025"
-                android:layout_marginTop="4dp"/>
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:drawableStart="@drawable/ic_calendar"
+            android:drawablePadding="4dp"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvEventName"
+            app:layout_constraintTop_toBottomOf="@id/tvPriceRange"
+            tools:text="19 Desember 2025" />
 
-            <TextView
-                android:id="@+id/tv_event_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="💰 Rp. 175.000 - 300.000"
-                android:layout_marginTop="4dp"/>
+        <Button
+            android:id="@+id/btnAction"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/GreenAction"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="@string/action"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDate"
+            tools:ignore="MissingConstraints" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
+        <ImageButton
+            android:id="@+id/btnInfo"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_info"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintStart_toEndOf="@id/btnAction"
+            app:layout_constraintTop_toTopOf="@id/btnAction"
+            app:layout_constraintBottom_toBottomOf="@id/btnAction"
+            android:contentDescription="Info Detail" />
 
-                <Button
-                    android:id="@+id/btn_action"
-                    android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:text="Action"
-                    android:textColor="@color/white"
-                    android:background="@color/black"
-                    android:paddingHorizontal="16dp"
-                    android:layout_alignParentStart="true"/>
-
-                <ImageButton
-                    android:id="@+id/btn_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_launcher_foreground"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:layout_alignParentEnd="true"
-                    android:contentDescription="Info Event"/>
-            </RelativeLayout>
-        </LinearLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

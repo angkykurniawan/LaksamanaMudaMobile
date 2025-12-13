@@ -14,6 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EventManagement">
         <activity
+            android:name=".event.EditEventActivity"
+            android:exported="false" />
+        <activity
+            android:name=".event.AddEventActivity"
+            android:exported="false" />
+        <activity
             android:name=".team.EditCrewActivity"
             android:exported="false" />
         <activity

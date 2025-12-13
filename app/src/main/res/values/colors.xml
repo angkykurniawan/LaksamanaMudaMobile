@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="Oren">#FFA10A </color>
+    <color name="GreenAction">#4CAF50</color>
 </resources>
