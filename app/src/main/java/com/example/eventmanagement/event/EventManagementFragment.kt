@@ -29,12 +29,11 @@ class EventManagementFragment : Fragment(), EventActionListener {
     private var _binding: FragmentEventManagementBinding? = null
     private val binding get() = _binding!!
 
-    // Mengakses ViewModel yang sama yang digunakan oleh Fragment filter
     private val eventViewModel: EventViewModel by activityViewModels()
 
     private lateinit var database: DatabaseReference
-    private var allEventList: ArrayList<Event> = arrayListOf() // Data mentah dari Firebase
-    private lateinit var filteredEventList: ArrayList<Event> // Data yang ditampilkan di RecyclerView
+    private var allEventList: ArrayList<Event> = arrayListOf()
+    private lateinit var filteredEventList: ArrayList<Event>
     private lateinit var eventAdapter: EventAdapter
     private val TAG = "EVENT_FRAGMENT"
 
@@ -42,7 +41,6 @@ class EventManagementFragment : Fragment(), EventActionListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Asumsi FragmentEventManagementBinding sudah ada
         _binding = FragmentEventManagementBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -55,7 +53,7 @@ class EventManagementFragment : Fragment(), EventActionListener {
 
         setupRecyclerView()
         fetchEventData()
-        observeFilterChanges() // Mulai mengamati perubahan filter
+        observeFilterChanges()
 
         binding.cardAddEvent.setOnClickListener {
             startActivity(Intent(requireContext(), AddEventActivity::class.java))
@@ -65,7 +63,6 @@ class EventManagementFragment : Fragment(), EventActionListener {
     private fun setupRecyclerView() {
         binding.rvEventList.layoutManager = LinearLayoutManager(context)
 
-        // Melewatkan 'this' (Fragment) sebagai listener
         eventAdapter = EventAdapter(filteredEventList, this)
         binding.rvEventList.adapter = eventAdapter
     }
@@ -73,7 +70,6 @@ class EventManagementFragment : Fragment(), EventActionListener {
     private fun observeFilterChanges() {
         eventViewModel.currentFilter.observe(viewLifecycleOwner) { filter ->
             Log.d(TAG, "Filter aktif diubah menjadi: $filter")
-            // Terapkan filter setiap kali nilai ViewModel berubah
             applyFilterToEvents(filter)
         }
     }
@@ -81,13 +77,12 @@ class EventManagementFragment : Fragment(), EventActionListener {
     private fun applyFilterToEvents(filter: String) {
         filteredEventList.clear()
 
-        // Logika Filtering
-        // "History" di EventManagementFragment.kt mencakup "History" dan "Done"
         val filterLower = filter.lowercase(Locale.ROOT)
 
         val filtered = allEventList.filter { event ->
             val statusLower = event.status?.lowercase(Locale.ROOT)
             when (filterLower) {
+                // Filter History juga menampilkan status 'Done'
                 "history" -> statusLower == "history" || statusLower == "done"
                 else -> statusLower == filterLower
             }
@@ -95,7 +90,6 @@ class EventManagementFragment : Fragment(), EventActionListener {
 
         filteredEventList.addAll(filtered)
 
-        // Perbarui Tampilan
         binding.tvTotalEventCount.text = filteredEventList.size.toString()
         eventAdapter.notifyDataSetChanged()
 
@@ -120,7 +114,6 @@ class EventManagementFragment : Fragment(), EventActionListener {
 
                 Log.d(TAG, "Data mentah dimuat. Total: ${allEventList.size}")
 
-                // Setelah data mentah dimuat, terapkan filter yang sedang aktif
                 val activeFilter = eventViewModel.currentFilter.value ?: "Upcoming"
                 applyFilterToEvents(activeFilter)
             }
@@ -136,22 +129,18 @@ class EventManagementFragment : Fragment(), EventActionListener {
     // IMPLEMENTASI FUNGSI DARI EventActionListener INTERFACE
     // =========================================================
 
-    // 1. Edit
     override fun onEditClick(event: Event) {
         navigateToEditEvent(event.id)
     }
 
-    // 2. Delete
     override fun onDeleteClick(event: Event) {
         confirmDeleteEvent(event)
     }
 
-    // 3. Info (Detail)
     override fun onInfoClick(event: Event) {
         showEventDetailDialog(event)
     }
 
-    // 4. Aksi Detail Lain (Crew, Notification, Documentation, Engagement)
     override fun onDetailActionClick(event: Event, actionId: Int) {
         val actionName = when(actionId) {
             R.id.action_crew -> "Crew"
@@ -162,9 +151,6 @@ class EventManagementFragment : Fragment(), EventActionListener {
         }
 
         Toast.makeText(context, "Aksi $actionName untuk Event ${event.name} diklik.", Toast.LENGTH_SHORT).show()
-
-        // IMPLEMENTASI NAVIGASI SELANJUTNYA DITAMBAHKAN DI SINI
-        // Contoh: if (actionId == R.id.action_crew) { startActivity(Intent(requireContext(), CrewActivity::class.java)) }
     }
 
 
@@ -184,7 +170,6 @@ class EventManagementFragment : Fragment(), EventActionListener {
             .setMessage(message)
             .setPositiveButton("Close", null)
             .show()
-        //
     }
 
     private fun navigateToEditEvent(eventId: String?) {

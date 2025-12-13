@@ -18,7 +18,6 @@ import com.example.eventmanagement.event.EventActionListener
 
 class EventAdapter(
     private val eventList: ArrayList<Event>,
-    // Menggunakan interface listener baru
     private val listener: EventActionListener
 ) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
 
@@ -27,6 +26,7 @@ class EventAdapter(
         val tvEventName: TextView = itemView.findViewById(R.id.tvEventName)
         val tvPriceRange: TextView = itemView.findViewById(R.id.tvPriceRange)
         val tvDate: TextView = itemView.findViewById(R.id.tvDate)
+        // tvStatus dihilangkan
         val btnAction: Button = itemView.findViewById(R.id.btnAction)
         val btnInfo: ImageButton = itemView.findViewById(R.id.btnInfo)
     }
@@ -57,13 +57,14 @@ class EventAdapter(
         // --- LOGIKA POP-UP MENU UNTUK btnAction ---
         holder.btnAction.setOnClickListener {
             val popup = PopupMenu(context, holder.btnAction)
+            // Asumsi menu_event_action.xml sudah ada dengan 6 item
             popup.menuInflater.inflate(R.menu.menu_event_action, popup.menu)
 
             popup.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.action_edit -> listener.onEditClick(currentEvent)
                     R.id.action_delete -> listener.onDeleteClick(currentEvent)
-                    // Aksi lain yang didelegasikan ke Fragment
+                    // Aksi Detail Lainnya
                     else -> listener.onDetailActionClick(currentEvent, menuItem.itemId)
                 }
                 true
