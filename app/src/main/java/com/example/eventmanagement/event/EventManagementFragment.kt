@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.eventmanagement.HeaderFragment
 import com.example.eventmanagement.event.NavigationFragment
@@ -26,8 +27,13 @@ class EventManagementFragment : Fragment() {
 
     private var _binding: FragmentEventManagementBinding? = null
     private val binding get() = _binding!!
+
+    // Inisialisasi ViewModel yang sama digunakan oleh NavigationFragment
+    private val eventViewModel: EventViewModel by activityViewModels()
+
     private lateinit var database: DatabaseReference
-    private lateinit var eventList: ArrayList<Event>
+    private var allEventList: ArrayList<Event> = arrayListOf() // Menyimpan semua data dari Firebase
+    private lateinit var filteredEventList: ArrayList<Event> // Daftar yang difilter untuk RecyclerView
     private lateinit var eventAdapter: EventAdapter
     private val TAG = "EVENT_FRAGMENT"
 
@@ -35,7 +41,6 @@ class EventManagementFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Asumsi layout XML Fragment Anda adalah fragment_event_management.xml
         _binding = FragmentEventManagementBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -43,33 +48,95 @@ class EventManagementFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        database = FirebaseDatabase.getInstance().getReference("events") // Node baru untuk data events
-        eventList = arrayListOf()
+        database = FirebaseDatabase.getInstance().getReference("events")
+        filteredEventList = arrayListOf() // Inisialisasi daftar filter
 
         setupRecyclerView()
         fetchEventData()
 
+        // Mulai mengamati perubahan filter dari ViewModel
+        observeFilterChanges()
+
         binding.cardAddEvent.setOnClickListener {
-            // Navigasi ke Activity untuk menambah event
             startActivity(Intent(requireContext(), AddEventActivity::class.java))
         }
-
-        // TODO: Tambahkan listener untuk filter Upcoming/Pending/History
     }
 
     private fun setupRecyclerView() {
         binding.rvEventList.layoutManager = LinearLayoutManager(context)
 
-        eventAdapter = EventAdapter(eventList,
+        eventAdapter = EventAdapter(filteredEventList,
             onActionClick = { event -> showEventActionDialog(event) },
             onInfoClick = { event -> showEventDetailDialog(event) }
         )
         binding.rvEventList.adapter = eventAdapter
     }
 
-    // Dialog Detail Event (sesuai mockup)
+    private fun observeFilterChanges() {
+        eventViewModel.currentFilter.observe(viewLifecycleOwner) { filter ->
+            Log.d(TAG, "Filter aktif diubah menjadi: $filter")
+            // Setiap kali filter berubah, kita panggil fungsi filtering
+            applyFilterToEvents(filter)
+        }
+    }
+
+    private fun applyFilterToEvents(filter: String) {
+        filteredEventList.clear()
+
+        // Logika Filtering
+        if (filter.equals("All", ignoreCase = true)) {
+            // Jika ada filter "All", tampilkan semua event
+            filteredEventList.addAll(allEventList)
+        } else {
+            // Terapkan filter berdasarkan status
+            val filtered = allEventList.filter { event ->
+                event.status?.equals(filter, ignoreCase = true) == true
+            }
+            filteredEventList.addAll(filtered)
+        }
+
+        // Perbarui tampilan RecyclerView
+        binding.tvTotalEventCount.text = filteredEventList.size.toString()
+        eventAdapter.notifyDataSetChanged()
+
+        if (filteredEventList.isEmpty()) {
+            Toast.makeText(context, "Tidak ada event dengan status '$filter'.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Fungsi ini sekarang hanya berfungsi untuk memuat data MENTAH dari Firebase
+    private fun fetchEventData() {
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                allEventList.clear() // Bersihkan daftar mentah
+
+                if (snapshot.exists()) {
+                    for (eventSnapshot in snapshot.children) {
+                        val event = eventSnapshot.getValue(Event::class.java)
+                        if (event != null) {
+                            allEventList.add(event)
+                        }
+                    }
+                }
+
+                Log.d(TAG, "Data mentah dimuat. Total: ${allEventList.size}")
+
+                // Setelah data mentah dimuat, terapkan filter yang sedang aktif
+                val activeFilter = eventViewModel.currentFilter.value ?: "Upcoming" // Default filter
+                applyFilterToEvents(activeFilter)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "Gagal memuat data event: ${error.message}")
+                Toast.makeText(context, "Gagal memuat data event: ${error.message}", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    // ... (showEventDetailDialog, showEventActionDialog, navigateToEditEvent, confirmDeleteEvent, deleteEvent tetap sama)
+
     private fun showEventDetailDialog(event: Event) {
-        // Implementasi sederhana, bisa dipercantik menggunakan custom dialog
+        // Implementasi dialog detail
         val message = "Event: ${event.name}\n" +
                 "Status: ${event.status}\n" +
                 "Description: ${event.description}\n" +
@@ -83,7 +150,6 @@ class EventManagementFragment : Fragment() {
             .show()
     }
 
-    // Dialog Aksi Event (Edit/Delete)
     private fun showEventActionDialog(event: Event) {
         val options = arrayOf("Edit Event", "Delete Event")
         AlertDialog.Builder(requireContext())
@@ -131,33 +197,6 @@ class EventManagementFragment : Fragment() {
             }
     }
 
-    private fun fetchEventData() {
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                eventList.clear()
-                var eventCount = 0
-
-                if (snapshot.exists()) {
-                    for (eventSnapshot in snapshot.children) {
-                        val event = eventSnapshot.getValue(Event::class.java)
-                        if (event != null) {
-                            eventList.add(event)
-                            eventCount++
-                        }
-                    }
-                }
-
-                binding.tvTotalEventCount.text = eventCount.toString() // Asumsi ID ada di XML
-                eventAdapter.notifyDataSetChanged()
-                Log.d(TAG, "Data event berhasil dimuat. Total: $eventCount")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "Gagal memuat data event: ${error.message}")
-                Toast.makeText(context, "Gagal memuat data event: ${error.message}", Toast.LENGTH_LONG).show()
-            }
-        })
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
