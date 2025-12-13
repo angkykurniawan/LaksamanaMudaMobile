@@ -24,8 +24,8 @@ class BottomNavigationView : AppCompatActivity() {
 
         // Set fragment default saat aplikasi pertama kali dibuka
         if (savedInstanceState == null) {
-            replaceFragment(CustomerEngagementFragment())
-            bottomNav.selectedItemId = R.id.nav_customer
+            replaceFragment(HomeFragment())
+            bottomNav.selectedItemId = R.id.nav_home
         }
 
         // Listener FAB Home
@@ -37,11 +37,11 @@ class BottomNavigationView : AppCompatActivity() {
         // Listener BottomNavigation
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
+                R.id.nav_home -> fabHome.performClick()
                 R.id.nav_team -> replaceFragment(TeamFragment())
                 R.id.nav_event -> replaceFragment(EventManagementFragment())
                 R.id.nav_ticket -> replaceFragment(TicketFragment())
                 R.id.nav_customer -> replaceFragment(CustomerEngagementFragment())
-                R.id.nav_home -> fabHome.performClick()
             }
             true
         }
