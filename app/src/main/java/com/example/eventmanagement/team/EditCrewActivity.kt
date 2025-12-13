@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -27,18 +28,19 @@ class EditCrewActivity : AppCompatActivity() {
     private lateinit var etJoinDate: EditText
     private lateinit var etRole: EditText
     private lateinit var etEmail: EditText
-    private lateinit var etPhone: EditText // Tambahkan Phone
+    private lateinit var etPhone: EditText
     private lateinit var btnSave: Button
     private lateinit var btnCancel: Button
-
+    private lateinit var btnBack: ImageButton
     private lateinit var database: DatabaseReference
     private var crewId: String? = null
     private val TAG = "EDIT_CREW_ACTIVITY"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Asumsi layout XML untuk tampilan edit kru adalah 'activity_edit_crew'
         setContentView(R.layout.activity_edit_crew)
+
+        // Catatan: androidx.activity.enableEdgeToEdge dan androidx.core.view.* tidak diperlukan di sini
 
         database = FirebaseDatabase.getInstance().getReference("crew")
         crewId = intent.getStringExtra("CREW_ID")
@@ -55,13 +57,15 @@ class EditCrewActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        // ID input field harus sesuai dengan XML activity_edit_crew
+        // Inisialisasi tombol back
+        btnBack = findViewById(R.id.btn_back_edit)
+
         etName = findViewById(R.id.et_name)
         etBirthDate = findViewById(R.id.et_birth_date)
         etJoinDate = findViewById(R.id.et_join_date)
         etRole = findViewById(R.id.et_role)
         etEmail = findViewById(R.id.et_email)
-        etPhone = findViewById(R.id.et_phone) // Asumsi ID et_phone ada di XML
+        etPhone = findViewById(R.id.et_phone)
 
         btnSave = findViewById(R.id.btn_save_crew)
         btnCancel = findViewById(R.id.btn_cancel)
@@ -71,6 +75,9 @@ class EditCrewActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+        // Listener tombol back (baru)
+        btnBack.setOnClickListener { finish() }
+
         etBirthDate.setOnClickListener { showDatePickerDialog(etBirthDate) }
         etJoinDate.setOnClickListener { showDatePickerDialog(etJoinDate) }
 
@@ -100,6 +107,7 @@ class EditCrewActivity : AppCompatActivity() {
     private fun loadCrewData(id: String) {
         database.child(id).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                // Asumsi class Crew ada di package team
                 val crew = snapshot.getValue(Crew::class.java)
                 if (crew != null) {
                     etName.setText(crew.name)
@@ -107,7 +115,7 @@ class EditCrewActivity : AppCompatActivity() {
                     etJoinDate.setText(crew.joinDate)
                     etRole.setText(crew.role)
                     etEmail.setText(crew.email)
-                    etPhone.setText(crew.phone) // Muat Phone
+                    etPhone.setText(crew.phone)
                 } else {
                     Toast.makeText(this@EditCrewActivity, "Data Kru tidak ditemukan.", Toast.LENGTH_LONG).show()
                     finish()
@@ -126,7 +134,7 @@ class EditCrewActivity : AppCompatActivity() {
         val joinDate = etJoinDate.text.toString().trim()
         val role = etRole.text.toString().trim()
         val email = etEmail.text.toString().trim()
-        val phone = etPhone.text.toString().trim() // Ambil Phone
+        val phone = etPhone.text.toString().trim()
 
         // --- Validasi Input ---
         if (name.isEmpty()) { etName.error = "Nama wajib diisi"; return }
@@ -136,6 +144,7 @@ class EditCrewActivity : AppCompatActivity() {
         if (email.isEmpty()) { etEmail.error = "Email wajib diisi"; return }
         if (phone.isEmpty()) { etPhone.error = "Nomor HP wajib diisi"; return }
 
+        // Asumsi class Crew ada di package team
         val updatedCrew = Crew(
             id = crewId,
             name = name,
@@ -143,7 +152,7 @@ class EditCrewActivity : AppCompatActivity() {
             joinDate = joinDate,
             role = role,
             email = email,
-            phone = phone // Sertakan Phone
+            phone = phone
         )
 
         btnSave.isEnabled = false

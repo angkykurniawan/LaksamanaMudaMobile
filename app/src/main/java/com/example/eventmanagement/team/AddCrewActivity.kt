@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -24,16 +25,15 @@ class AddCrewActivity : AppCompatActivity() {
     private lateinit var etJoinDate: EditText
     private lateinit var etRole: EditText
     private lateinit var etEmail: EditText
-    private lateinit var etPhone: EditText // Tambahkan Phone
+    private lateinit var etPhone: EditText
     private lateinit var btnAdd: Button
     private lateinit var btnCancel: Button
-
+    private lateinit var btnBack: ImageButton
     private lateinit var database: DatabaseReference
     private val TAG = "ADD_CREW_ACTIVITY"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Asumsi layout XML untuk tampilan tambah kru adalah 'activity_add_crew'
         setContentView(R.layout.activity_add_crew)
 
         database = FirebaseDatabase.getInstance().getReference("crew")
@@ -43,22 +43,24 @@ class AddCrewActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        // ID input field harus sesuai dengan XML activity_add_crew
         etName = findViewById(R.id.et_name)
         etBirthDate = findViewById(R.id.et_birth_date)
         etJoinDate = findViewById(R.id.et_join_date)
         etRole = findViewById(R.id.et_role)
         etEmail = findViewById(R.id.et_email)
-        etPhone = findViewById(R.id.et_phone) // Asumsi ID et_phone ada di XML
+        etPhone = findViewById(R.id.et_phone)
 
         btnAdd = findViewById(R.id.btn_add_crew)
         btnCancel = findViewById(R.id.btn_cancel)
+        btnBack = findViewById(R.id.btn_back) // FIX: Inisialisasi tombol back
 
         etBirthDate.keyListener = null
         etJoinDate.keyListener = null
     }
 
     private fun setupListeners() {
+        btnBack.setOnClickListener { finish() } // FIX: Tombol back bekerja
+
         etBirthDate.setOnClickListener { showDatePickerDialog(etBirthDate) }
         etJoinDate.setOnClickListener { showDatePickerDialog(etJoinDate) }
 
@@ -91,7 +93,7 @@ class AddCrewActivity : AppCompatActivity() {
         val joinDate = etJoinDate.text.toString().trim()
         val role = etRole.text.toString().trim()
         val email = etEmail.text.toString().trim()
-        val phone = etPhone.text.toString().trim() // Ambil Phone
+        val phone = etPhone.text.toString().trim()
 
         // --- Validasi Input ---
         if (name.isEmpty()) { etName.error = "Nama wajib diisi"; return }
@@ -120,7 +122,7 @@ class AddCrewActivity : AppCompatActivity() {
             joinDate = joinDate,
             role = role,
             email = email,
-            phone = phone // Sertakan Phone
+            phone = phone
         )
 
         btnAdd.isEnabled = false
