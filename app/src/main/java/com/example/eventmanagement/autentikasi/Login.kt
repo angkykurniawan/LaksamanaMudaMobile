@@ -12,10 +12,9 @@ import com.example.eventmanagement.databinding.ActivityLoginBinding // Ganti ke 
 // HAPUS BARIS YANG ERROR: private var Button.strokeWidth: Int
 // Jika binding Anda ActivityLoginBinding, pastikan Activity Anda adalah Login, bukan LoginContainerActivity
 
-class Login: AppCompatActivity() { // Menggunakan nama Activity container
+class Login: AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    // Menggunakan nama kelas Fragment: LoginEmail dan LoginNoHp
     private val fragmentEmail = LoginEmail()
     private val fragmentNoHp = LoginNoHp()
 
@@ -24,7 +23,6 @@ class Login: AppCompatActivity() { // Menggunakan nama Activity container
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Tampilkan fragment Email saat Activity pertama kali dibuat
         if (savedInstanceState == null) {
             replaceFragment(fragmentEmail)
             updateToggleUI(true)
@@ -48,34 +46,31 @@ class Login: AppCompatActivity() { // Menggunakan nama Activity container
     }
 
     private fun updateToggleUI(isEmailMode: Boolean) {
-        // Casting tombol ke MaterialButton agar bisa mengakses strokeWidth
         val btnEmail = binding.btnEmail as MaterialButton
         val btnPhoneNumber = binding.btnPhoneNumber as MaterialButton
 
-        // Pastikan R.color.Oren terdefinisi dan dapat diakses
         val selectedColor = ContextCompat.getColor(this, R.color.Oren)
         val defaultWhite = ContextCompat.getColor(this, android.R.color.white)
         val black = ContextCompat.getColor(this, android.R.color.black)
 
-        // Konversi dp ke pixel untuk strokeWidth
-        val strokeWidthPx = resources.displayMetrics.density.toInt() // 1dp dalam pixel
+        val strokeWidthPx = resources.displayMetrics.density.toInt()
         val noStrokeWidth = 0
 
         if (isEmailMode) {
             // Email (Terpilih)
             btnEmail.setBackgroundColor(selectedColor)
             btnEmail.setTextColor(defaultWhite)
-            btnEmail.strokeWidth = noStrokeWidth // Menggunakan properti strokeWidth MaterialButton
+            btnEmail.strokeWidth = noStrokeWidth
 
             // Phone Number (Tidak Terpilih)
             btnPhoneNumber.setBackgroundColor(defaultWhite)
             btnPhoneNumber.setTextColor(black)
-            btnPhoneNumber.strokeWidth = strokeWidthPx // Menggunakan 1dp
+            btnPhoneNumber.strokeWidth = strokeWidthPx
         } else {
             // Email (Tidak Terpilih)
             btnEmail.setBackgroundColor(defaultWhite)
             btnEmail.setTextColor(black)
-            btnEmail.strokeWidth = strokeWidthPx // Menggunakan 1dp
+            btnEmail.strokeWidth = strokeWidthPx
 
             // Phone Number (Terpilih)
             btnPhoneNumber.setBackgroundColor(selectedColor)

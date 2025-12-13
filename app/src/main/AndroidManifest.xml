@@ -23,13 +23,13 @@
             android:name=".Dashboard"
             android:exported="false" />
         <activity
-            android:name=".autentikasi.Login"
+            android:name=".autentikasi.RegisterActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true" />
         <activity
-            android:name=".autentikasi.RegisterActivity"
+            android:name=".autentikasi.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
