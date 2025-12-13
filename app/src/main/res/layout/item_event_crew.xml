@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/ivCrewCardIcon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_crew"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="16dp"
+            app:tint="@android:color/black"
+            tools:ignore="ContentDescription" />
+
+        <LinearLayout
+            android:id="@+id/layoutCrewDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toEndOf="@id/ivCrewCardIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/layoutCrewStats">
+
+            <TextView
+                android:id="@+id/tvCrewName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_people"
+                android:drawablePadding="8dp"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="Arion" />
+
+            <TextView
+                android:id="@+id/tvAssignedDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:drawableStart="@drawable/ic_calendar"
+                android:drawablePadding="8dp"
+                android:textSize="12sp"
+                tools:text="19 Desember 2024" />
+
+            <TextView
+                android:id="@+id/tvCrewEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:drawableStart="@drawable/ic_email"
+                android:drawablePadding="8dp"
+                android:textSize="12sp"
+                tools:text="arion@gmail.com" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutCrewStats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@id/btnDeleteCrew"
+            app:layout_constraintTop_toTopOf="@id/layoutCrewDetails"
+            app:layout_constraintBottom_toBottomOf="@id/layoutCrewDetails"
+            android:layout_marginEnd="16dp">
+
+            <TextView
+                android:id="@+id/tvCrewDOB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_born"
+                android:drawablePadding="8dp"
+                android:textSize="12sp"
+                tools:text="26 April 2000" />
+
+            <TextView
+                android:id="@+id/tvCrewRole"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:drawableStart="@drawable/ic_role"
+                android:drawablePadding="8dp"
+                android:textSize="12sp"
+                tools:text="Crew" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnDeleteCrew"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_delete"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="Delete Crew"
+            app:tint="@android:color/holo_red_dark" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -18,6 +18,7 @@ import com.example.eventmanagement.adapters.EventAdapter
 import com.example.eventmanagement.customer.CustomerEngagementFragment
 import com.example.eventmanagement.databinding.FragmentEventManagementBinding
 import com.example.eventmanagement.event.doc.DocumentationManagementFragment
+import com.example.eventmanagement.event.eventCrew.EventCrewFragment
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -149,16 +150,17 @@ class EventManagementFragment : Fragment(), EventActionListener {
     // 4. Aksi Detail Lain (Crew, Notification, Documentation, Engagement)
     override fun onDetailActionClick(event: Event, actionId: Int) {
         val destinationActivity = when(actionId) {
-//            R.id.action_crew -> CrewActivity::class.java
 //            R.id.action_notification -> NotificationActivity::class.java
 
+            R.id.action_crew -> {
+                navigateToFragment(EventCrewFragment(), event.id)
+            }
+
             R.id.action_documentation -> {
-                // KHUSUS FRAGMENT: Panggil fungsi transaction
                 navigateToFragment(DocumentationManagementFragment(), event.id)
             }
 
             R.id.action_engagement -> {
-                // KHUSUS FRAGMENT: Panggil fungsi transaction
                 navigateToFragment(CustomerEngagementFragment(), event.id)
             }
 
