@@ -15,6 +15,7 @@ import com.example.eventmanagement.HeaderFragment
 import com.example.eventmanagement.event.NavigationFragment
 import com.example.eventmanagement.R
 import com.example.eventmanagement.adapters.EventAdapter
+import com.example.eventmanagement.customer.CustomerEngagementFragment
 import com.example.eventmanagement.databinding.FragmentEventManagementBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -82,7 +83,6 @@ class EventManagementFragment : Fragment(), EventActionListener {
         val filtered = allEventList.filter { event ->
             val statusLower = event.status?.lowercase(Locale.ROOT)
             when (filterLower) {
-                // Filter History juga menampilkan status 'Done'
                 "history" -> statusLower == "history" || statusLower == "done"
                 else -> statusLower == filterLower
             }
@@ -127,36 +127,57 @@ class EventManagementFragment : Fragment(), EventActionListener {
 
     // =========================================================
     // IMPLEMENTASI FUNGSI DARI EventActionListener INTERFACE
+    // Menangani semua klik Pop-up Menu
     // =========================================================
 
+    // 1. Edit (Mengarahkan ke Edit Event Activity)
     override fun onEditClick(event: Event) {
-        navigateToEditEvent(event.id)
+        navigateToActivity(EditEventActivity::class.java, event.id)
     }
 
+    // 2. Delete
     override fun onDeleteClick(event: Event) {
         confirmDeleteEvent(event)
     }
 
+    // 3. Info (Detail)
     override fun onInfoClick(event: Event) {
         showEventDetailDialog(event)
     }
 
+    // 4. Aksi Detail Lain (Crew, Notification, Documentation, Engagement)
     override fun onDetailActionClick(event: Event, actionId: Int) {
-        val actionName = when(actionId) {
-            R.id.action_crew -> "Crew"
-            R.id.action_notification -> "Notification"
-            R.id.action_documentation -> "Documentation"
-            R.id.action_engagement -> "Engagement"
-            else -> "Unknown Action"
-        }
+        val destinationActivity = when(actionId) {
+//            R.id.action_crew -> CrewActivity::class.java
+//            R.id.action_notification -> NotificationActivity::class.java
+//            R.id.action_documentation -> DocumentationActivity::class.java
+            R.id.action_engagement -> {
+                // KHUSUS FRAGMENT: Panggil fungsi transaction
+                navigateToFragment(CustomerEngagementFragment(), event.id)
+            }
 
-        Toast.makeText(context, "Aksi $actionName untuk Event ${event.name} diklik.", Toast.LENGTH_SHORT).show()
+            else -> {
+                Toast.makeText(context, "Aksi tidak dikenal.", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
     }
 
 
     // =========================================================
     // FUNGSI PENDUKUNG
     // =========================================================
+
+    // Fungsi umum untuk navigasi Activity dan membawa ID Event
+    private fun navigateToActivity(activityClass: Class<*>, eventId: String?) {
+        if (eventId != null) {
+            val intent = Intent(requireContext(), activityClass)
+            intent.putExtra("EVENT_ID", eventId)
+            startActivity(intent)
+        } else {
+            Toast.makeText(context, "ID Event tidak valid.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun showEventDetailDialog(event: Event) {
         val message = "Event: ${event.name}\n" +
@@ -170,16 +191,6 @@ class EventManagementFragment : Fragment(), EventActionListener {
             .setMessage(message)
             .setPositiveButton("Close", null)
             .show()
-    }
-
-    private fun navigateToEditEvent(eventId: String?) {
-        if (eventId != null) {
-            val intent = Intent(requireContext(), EditEventActivity::class.java)
-            intent.putExtra("EVENT_ID", eventId)
-            startActivity(intent)
-        } else {
-            Toast.makeText(context, "ID Event tidak valid untuk diedit.", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun confirmDeleteEvent(event: Event) {
@@ -210,4 +221,31 @@ class EventManagementFragment : Fragment(), EventActionListener {
         super.onDestroyView()
         _binding = null
     }
+
+    /**
+     * Fungsi baru untuk menavigasi ke Fragment, menggantikan konten container saat ini.
+     * Catatan: Asumsikan container memiliki ID R.id.fragment_container
+     */
+    private fun navigateToFragment(fragment: Fragment, eventId: String?) {
+        if (eventId == null) {
+            Toast.makeText(context, "ID Event tidak valid.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // 1. Siapkan Bundle untuk meneruskan EVENT_ID ke Fragment baru
+        val args = Bundle().apply {
+            putString("EVENT_ID", eventId)
+        }
+        fragment.arguments = args
+
+        // 2. Lakukan Fragment Transaction
+        parentFragmentManager.beginTransaction()
+            // R.id.fragment_container harus diubah sesuai dengan ID container di Activity utama Anda
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null) // Tambahkan ke back stack agar tombol kembali berfungsi
+            .commit()
+
+        Toast.makeText(context, "Memuat halaman Engagement...", Toast.LENGTH_SHORT).show()
+    }
+
 }
