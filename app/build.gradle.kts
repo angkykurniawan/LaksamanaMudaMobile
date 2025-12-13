@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("org.jetbrains.kotlin.plugin.serialization")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -41,9 +42,9 @@ android {
 
 dependencies {
     // SUPABASE & NETWORKING
-    implementation("io.github.jan-tennert.supabase:supabase-kt:1.4.1")
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:1.4.1")
-    implementation("io.github.jan-tennert.supabase:gotrue-kt:1.4.1")
+//    implementation("io.github.jan-tennert.supabase:supabase-kt:1.4.1")
+//    implementation("io.github.jan-tennert.supabase:postgrest-kt:1.4.1")
+//    implementation("io.github.jan-tennert.supabase:gotrue-kt:1.4.1")
 
     // GANTI SEMUA VERSI KTOR KE VERSI TERBARU YANG SESUAI (misal: 2.3.8)
     implementation("io.ktor:ktor-client-android:2.3.8")
@@ -51,7 +52,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.8")
 
     // Gunakan versi JSON terbaru yang kompatibel dengan Ktor 2.3.8
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3") // Naikkan dari 1.5.1
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
@@ -62,7 +63,13 @@ dependencies {
 
     // Gambar String
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.firebase.database)
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+    // ** Tambahkan Firebase Realtime Database SDK **
+    implementation("com.google.firebase:firebase-database-ktx")
+
+    // Pastikan Anda juga memiliki bom platform
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
 
     // DEPENDENCY TAMBAHAN YANG DISARANKAN UNTUK KOMPONEN UI
     implementation("androidx.recyclerview:recyclerview:1.3.2")
@@ -81,6 +88,8 @@ dependencies {
 
     // Untuk UI (jika Anda menggunakan TextInputLayout)
     implementation("com.google.android.material:material:1.11.0")
+
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
