@@ -27,10 +27,10 @@ import com.google.firebase.database.ValueEventListener
 import io.ktor.client.content.LocalFileContent
 import java.util.Locale
 
-
 class EventManagementFragment : Fragment(), EventActionListener {
 
     private var _binding: FragmentEventManagementBinding? = null
+    // Baris 34: Getter yang bisa crash jika _binding null. Dilindungi di fungsi pemanggil.
     private val binding get() = _binding!!
 
     private val eventViewModel: EventViewModel by activityViewModels()
@@ -40,6 +40,9 @@ class EventManagementFragment : Fragment(), EventActionListener {
     private lateinit var filteredEventList: ArrayList<Event>
     private lateinit var eventAdapter: EventAdapter
     private val TAG = "EVENT_FRAGMENT"
+
+    // Variabel untuk menyimpan listener Firebase agar bisa dihapus saat onDestroyView
+    private var eventValueListener: ValueEventListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,6 +82,13 @@ class EventManagementFragment : Fragment(), EventActionListener {
     }
 
     private fun applyFilterToEvents(filter: String) {
+        // PERBAIKAN: Cek apakah _binding masih valid
+        val currentBinding = _binding
+        if (currentBinding == null) {
+            Log.w(TAG, "View sudah dihancurkan, tidak dapat menerapkan filter.")
+            return
+        }
+
         filteredEventList.clear()
 
         val filterLower = filter.lowercase(Locale.ROOT)
@@ -93,7 +103,7 @@ class EventManagementFragment : Fragment(), EventActionListener {
 
         filteredEventList.addAll(filtered)
 
-        binding.tvTotalEventCount.text = filteredEventList.size.toString()
+        currentBinding.tvTotalEventCount.text = filteredEventList.size.toString()
         eventAdapter.notifyDataSetChanged()
 
         if (filteredEventList.isEmpty() && isResumed) {
@@ -102,7 +112,7 @@ class EventManagementFragment : Fragment(), EventActionListener {
     }
 
     private fun fetchEventData() {
-        database.addValueEventListener(object : ValueEventListener {
+        eventValueListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 allEventList.clear()
 
@@ -125,7 +135,8 @@ class EventManagementFragment : Fragment(), EventActionListener {
                 Log.e(TAG, "Gagal memuat data event: ${error.message}")
                 Toast.makeText(context, "Gagal memuat data event: ${error.message}", Toast.LENGTH_LONG).show()
             }
-        })
+        }
+        database.addValueEventListener(eventValueListener!!)
     }
 
     // =========================================================
@@ -223,31 +234,32 @@ class EventManagementFragment : Fragment(), EventActionListener {
             }
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
+
+        // HAPUS LISTENER FIREBASE SAAT VIEW DIHANCURKAN
+        if (eventValueListener != null) {
+            database.removeEventListener(eventValueListener!!)
+        }
+
+        // ATUR _binding KE NULL UNTUK MENCEGAH CRASH ASINKRON
         _binding = null
     }
 
-    /**
-     * Fungsi untuk menavigasi ke Fragment, menggantikan konten container saat ini.
-     */
     private fun navigateToFragment(fragment: Fragment, eventId: String?) {
         if (eventId == null) {
             Toast.makeText(context, "ID Event tidak valid.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // 1. Siapkan Bundle untuk meneruskan EVENT_ID ke Fragment baru
         val args = Bundle().apply {
             putString("EVENT_ID", eventId)
         }
         fragment.arguments = args
 
-        // 2. Lakukan Fragment Transaction
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null) // Tambahkan ke back stack agar tombol kembali berfungsi
+            .addToBackStack(null)
             .commit()
 
         Toast.makeText(context, "Memuat halaman Engagement...", Toast.LENGTH_SHORT).show()

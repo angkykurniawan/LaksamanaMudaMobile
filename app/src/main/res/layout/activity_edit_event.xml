@@ -4,32 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".event.EditEventActivity">
+    tools:context=".event.EditEventFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
         <ImageButton
             android:id="@+id/btn_back_edit"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_back"
             android:contentDescription="Back"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="12dp"
             app:tint="@android:color/holo_red_dark" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="EDIT EVENT PAGE"
-            android:textSize="28sp"
+            android:textSize="24sp"
             android:textStyle="bold|italic"
             android:textColor="@android:color/black"
-            android:layout_marginBottom="32dp"/>
+            android:layout_marginBottom="24dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,8 +46,8 @@
             android:layout_height="wrap_content"
             android:hint="Halloween Karaoke Part 2025"
             android:inputType="text"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_edittext_rounded"/>
 
         <TextView
@@ -53,15 +56,15 @@
             android:text="Status"
             android:textStyle="bold"
             android:layout_marginBottom="4dp"/>
-        <EditText
-            android:id="@+id/et_status"
+
+        <Spinner
+            android:id="@+id/sp_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Done"
-            android:inputType="text"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_edittext_rounded"/>
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -77,8 +80,8 @@
             android:inputType="textMultiLine"
             android:lines="3"
             android:gravity="top"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_edittext_rounded"/>
 
         <TextView
@@ -93,8 +96,8 @@
             android:layout_height="wrap_content"
             android:hint="50.000"
             android:inputType="text"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_edittext_rounded"/>
 
         <TextView
@@ -106,7 +109,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_edittext_rounded">
 
             <EditText
@@ -118,8 +121,8 @@
                 android:paddingStart="12dp"
                 android:paddingEnd="48dp"
                 android:background="@android:color/transparent"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 tools:ignore="RtlSymmetry" />
 
             <ImageView
@@ -144,7 +147,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_edittext_rounded">
 
             <EditText
@@ -158,8 +161,8 @@
                 android:paddingStart="12dp"
                 android:paddingEnd="48dp"
                 android:background="@android:color/transparent"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 tools:ignore="RtlSymmetry" />
 
             <ImageView
@@ -179,7 +182,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
 
             <Button
                 android:id="@+id/btn_save_event"

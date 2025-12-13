@@ -3,7 +3,6 @@ package com.example.eventmanagement.event
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.eventmanagement.R
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -73,9 +73,7 @@ class EditEventFragment : Fragment() {
 
         btnBack = view.findViewById(R.id.btn_back_edit)
         etName = view.findViewById(R.id.et_name)
-        // spStatus kini sudah cocok dengan ID Spinner di XML
         spStatus = view.findViewById(R.id.sp_status)
-
         etDescription = view.findViewById(R.id.et_description)
         etPrice = view.findViewById(R.id.et_price)
         etPoster = view.findViewById(R.id.et_poster)
@@ -97,9 +95,10 @@ class EditEventFragment : Fragment() {
 
     private fun setupListeners() {
         btnBack.setOnClickListener { parentFragmentManager.popBackStack() }
+        btnCancel.setOnClickListener { parentFragmentManager.popBackStack() }
+
         etDate.setOnClickListener { showDatePickerDialog(etDate) }
         btnSave.setOnClickListener { handleUpdateEvent() }
-        btnCancel.setOnClickListener { parentFragmentManager.popBackStack() }
     }
 
     private fun showDatePickerDialog(editText: EditText) {
@@ -184,6 +183,8 @@ class EditEventFragment : Fragment() {
                 btnSave.isEnabled = true
                 Toast.makeText(context, "✅ Event $name berhasil diperbarui!", Toast.LENGTH_LONG).show()
                 Log.i(TAG, "Event berhasil diperbarui: $eventId")
+
+                // NAVIGASI BALIK: Keluar dari Fragment Edit dan kembali ke EventManagementFragment
                 parentFragmentManager.popBackStack()
             }
             .addOnFailureListener { error ->
