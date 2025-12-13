@@ -6,5 +6,6 @@ data class Anggota(
     val email: String? = null,
     val phone: String? = null,
     val password: String? = null,
-    val is_verified: String? = "false"
+    val is_verified: String? = "false",
+    val otp_temp: String? = null
 )
