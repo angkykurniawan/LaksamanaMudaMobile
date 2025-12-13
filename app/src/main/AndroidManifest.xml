@@ -22,9 +22,9 @@
 <!--        <activity-->
 <!--            android:name=".event.doc.DocumentationManagementActivity"-->
 <!--            android:exported="false" />-->
-        <activity
-            android:name=".event.EditEventActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".event.EditEventActivity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".event.AddEventActivity"
             android:exported="false" />
