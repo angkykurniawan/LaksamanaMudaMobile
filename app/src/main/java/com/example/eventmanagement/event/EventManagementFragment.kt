@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener
 import io.ktor.client.content.LocalFileContent
 import java.util.Locale
 
+
 class EventManagementFragment : Fragment(), EventActionListener {
 
     private var _binding: FragmentEventManagementBinding? = null
@@ -129,12 +130,11 @@ class EventManagementFragment : Fragment(), EventActionListener {
 
     // =========================================================
     // IMPLEMENTASI FUNGSI DARI EventActionListener INTERFACE
-    // Menangani semua klik Pop-up Menu
     // =========================================================
 
-    // 1. Edit (Mengarahkan ke Edit Event Activity)
+    // 1. Edit (Mengarahkan ke Edit Event Fragment)
     override fun onEditClick(event: Event) {
-        navigateToActivity(EditEventActivity::class.java, event.id)
+        navigateToFragment(EditEventFragment(), event.id)
     }
 
     // 2. Delete
@@ -149,8 +149,10 @@ class EventManagementFragment : Fragment(), EventActionListener {
 
     // 4. Aksi Detail Lain (Crew, Notification, Documentation, Engagement)
     override fun onDetailActionClick(event: Event, actionId: Int) {
-        val destinationActivity = when(actionId) {
-//            R.id.action_notification -> NotificationActivity::class.java
+        when(actionId) {
+            R.id.action_notification -> {
+                Toast.makeText(context, "Notifikasi untuk Event ${event.name} berhasil dikirimkan.", Toast.LENGTH_LONG).show()
+            }
 
             R.id.action_crew -> {
                 navigateToFragment(EventCrewFragment(), event.id)
@@ -166,17 +168,14 @@ class EventManagementFragment : Fragment(), EventActionListener {
 
             else -> {
                 Toast.makeText(context, "Aksi tidak dikenal.", Toast.LENGTH_SHORT).show()
-                return
             }
         }
     }
-
 
     // =========================================================
     // FUNGSI PENDUKUNG
     // =========================================================
 
-    // Fungsi umum untuk navigasi Activity dan membawa ID Event
     private fun navigateToActivity(activityClass: Class<*>, eventId: String?) {
         if (eventId != null) {
             val intent = Intent(requireContext(), activityClass)
@@ -231,8 +230,7 @@ class EventManagementFragment : Fragment(), EventActionListener {
     }
 
     /**
-     * Fungsi baru untuk menavigasi ke Fragment, menggantikan konten container saat ini.
-     * Catatan: Asumsikan container memiliki ID R.id.fragment_container
+     * Fungsi untuk menavigasi ke Fragment, menggantikan konten container saat ini.
      */
     private fun navigateToFragment(fragment: Fragment, eventId: String?) {
         if (eventId == null) {
@@ -248,7 +246,6 @@ class EventManagementFragment : Fragment(), EventActionListener {
 
         // 2. Lakukan Fragment Transaction
         parentFragmentManager.beginTransaction()
-            // R.id.fragment_container harus diubah sesuai dengan ID container di Activity utama Anda
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null) // Tambahkan ke back stack agar tombol kembali berfungsi
             .commit()

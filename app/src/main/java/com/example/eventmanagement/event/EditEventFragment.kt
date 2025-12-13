@@ -3,16 +3,16 @@ package com.example.eventmanagement.event
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.eventmanagement.R
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class EditEventActivity : AppCompatActivity() {
+class EditEventFragment : Fragment() {
 
     private lateinit var etName: EditText
     private lateinit var spStatus: Spinner
@@ -39,44 +39,56 @@ class EditEventActivity : AppCompatActivity() {
 
     private lateinit var database: DatabaseReference
     private var eventId: String? = null
-    private val TAG = "EDIT_EVENT_ACTIVITY"
+    private val TAG = "EDIT_EVENT_FRAGMENT"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // R.layout.activity_edit_event diasumsikan tersedia
-        setContentView(R.layout.activity_edit_event)
+    private var rootView: View? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        rootView = inflater.inflate(R.layout.fragment_edit_event, container, false)
+        return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         database = FirebaseDatabase.getInstance().getReference("events")
-        eventId = intent.getStringExtra("EVENT_ID")
 
-        if (eventId == null) {
-            Toast.makeText(this, "Error: ID Event tidak ditemukan.", Toast.LENGTH_LONG).show()
-            finish()
+        eventId = arguments?.getString("EVENT_ID")
+
+        if (eventId.isNullOrEmpty()) {
+            Toast.makeText(context, "Error: ID Event tidak ditemukan.", Toast.LENGTH_LONG).show()
+            parentFragmentManager.popBackStack()
             return
         }
 
-        initViews()
-        loadEventData(eventId!!) // FIX: Memanggil fungsi yang benar
+        initViews(view)
+        loadEventData(eventId!!)
         setupListeners()
     }
 
-    private fun initViews() {
-        btnBack = findViewById(R.id.btn_back_edit)
-        etName = findViewById(R.id.et_name)
-        spStatus = findViewById(R.id.sp_status)
-        etDescription = findViewById(R.id.et_description)
-        etPrice = findViewById(R.id.et_price)
-        etPoster = findViewById(R.id.et_poster)
-        etDate = findViewById(R.id.et_date)
+    private fun initViews(view: View) {
 
-        btnSave = findViewById(R.id.btn_save_event)
-        btnCancel = findViewById(R.id.btn_cancel)
+        btnBack = view.findViewById(R.id.btn_back_edit)
+        etName = view.findViewById(R.id.et_name)
+        // spStatus kini sudah cocok dengan ID Spinner di XML
+        spStatus = view.findViewById(R.id.sp_status)
+
+        etDescription = view.findViewById(R.id.et_description)
+        etPrice = view.findViewById(R.id.et_price)
+        etPoster = view.findViewById(R.id.et_poster)
+        etDate = view.findViewById(R.id.et_date)
+
+        btnSave = view.findViewById(R.id.btn_save_event)
+        btnCancel = view.findViewById(R.id.btn_cancel)
 
         etDate.keyListener = null
 
         // --- Setup Spinner ---
         val adapter = ArrayAdapter(
-            this,
+            requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
             eventStatuses
         )
@@ -84,10 +96,10 @@ class EditEventActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        btnBack.setOnClickListener { finish() }
+        btnBack.setOnClickListener { parentFragmentManager.popBackStack() }
         etDate.setOnClickListener { showDatePickerDialog(etDate) }
         btnSave.setOnClickListener { handleUpdateEvent() }
-        btnCancel.setOnClickListener { finish() }
+        btnCancel.setOnClickListener { parentFragmentManager.popBackStack() }
     }
 
     private fun showDatePickerDialog(editText: EditText) {
@@ -102,21 +114,20 @@ class EditEventActivity : AppCompatActivity() {
             editText.setText(sdf.format(calendar.time))
         }
 
-        DatePickerDialog(this, dateSetListener,
+        DatePickerDialog(requireContext(), dateSetListener,
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         ).show()
     }
 
-    private fun loadEventData(id: String) { // FIX: Mengubah nama fungsi dari loadCrewData menjadi loadEventData
+    private fun loadEventData(id: String) {
         database.child(id).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val event = snapshot.getValue(Event::class.java)
                 if (event != null) {
                     etName.setText(event.name)
 
-                    // SET NILAI SPINNER BERDASARKAN DATA FIREBASE
                     event.status?.let { status ->
                         val position = eventStatuses.indexOf(status)
                         if (position != -1) {
@@ -129,13 +140,13 @@ class EditEventActivity : AppCompatActivity() {
                     etPoster.setText(event.posterUrl)
                     etDate.setText(event.date)
                 } else {
-                    Toast.makeText(this@EditEventActivity, "Data Event tidak ditemukan.", Toast.LENGTH_LONG).show()
-                    finish()
+                    Toast.makeText(context, "Data Event tidak ditemukan.", Toast.LENGTH_LONG).show()
+                    parentFragmentManager.popBackStack()
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@EditEventActivity, "Gagal memuat data: ${error.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Gagal memuat data: ${error.message}", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -166,19 +177,19 @@ class EditEventActivity : AppCompatActivity() {
         )
 
         btnSave.isEnabled = false
-        Toast.makeText(this, "⏳ Memperbarui data Event...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "⏳ Memperbarui data Event...", Toast.LENGTH_SHORT).show()
 
         database.child(eventId!!).setValue(updatedEvent)
             .addOnSuccessListener {
                 btnSave.isEnabled = true
-                Toast.makeText(this, "✅ Event $name berhasil diperbarui!", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "✅ Event $name berhasil diperbarui!", Toast.LENGTH_LONG).show()
                 Log.i(TAG, "Event berhasil diperbarui: $eventId")
-                finish()
+                parentFragmentManager.popBackStack()
             }
             .addOnFailureListener { error ->
                 btnSave.isEnabled = true
                 val errorMessage = error.message ?: "Kesalahan tak teridentifikasi."
-                Toast.makeText(this, "❌ GAGAL FIREBASE: $errorMessage", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "❌ GAGAL FIREBASE: $errorMessage", Toast.LENGTH_LONG).show()
                 Log.e(TAG, "Firebase Update Failure: $errorMessage", error)
             }
     }
