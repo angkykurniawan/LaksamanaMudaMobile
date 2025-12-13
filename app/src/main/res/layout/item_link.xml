@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/ivLinkIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:tint="@color/Blue"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvLinkName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/ivLinkIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnEditLink"
+            tools:text="Link 1"
+            android:drawableStart="@drawable/ic_user"
+            android:drawablePadding="4dp"/>
+
+        <TextView
+            android:id="@+id/tvLinkUrl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@id/ivLinkIcon"
+            app:layout_constraintTop_toBottomOf="@id/tvLinkName"
+            app:layout_constraintEnd_toStartOf="@id/btnEditLink"
+            tools:text="drive.google.com/sfdfs6_s4d"
+            android:drawableStart="@drawable/ic_links"
+            android:drawablePadding="4dp"/>
+
+        <ImageButton
+            android:id="@+id/btnEditLink"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_edit"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintEnd_toStartOf="@id/btnDeleteLink"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="Edit Link" />
+
+        <ImageButton
+            android:id="@+id/btnDeleteLink"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_delete"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="Delete Link"
+            app:tint="@color/orange_selector" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
