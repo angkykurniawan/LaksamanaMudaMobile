@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import com.example.eventmanagement.R
 import com.example.eventmanagement.customer.CustomerEngagementFragment
 import com.example.eventmanagement.event.EventManagementFragment
+import com.example.eventmanagement.team.TeamFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
