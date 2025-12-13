@@ -14,11 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide // Import library Glide
 import com.example.eventmanagement.R
 import com.example.eventmanagement.event.Event // Import data class Event
+import com.example.eventmanagement.event.EventActionListener
 
 class EventAdapter(
     private val eventList: ArrayList<Event>,
-    private val onActionClick: (Event) -> Unit,
-    private val onInfoClick: (Event) -> Unit
+    // Menggunakan interface listener baru
+    private val listener: EventActionListener
 ) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
 
     class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -42,7 +43,6 @@ class EventAdapter(
         holder.tvEventName.text = currentEvent.name
         holder.tvPriceRange.text = currentEvent.priceRange
         holder.tvDate.text = currentEvent.date
-        // BARIS PENGATURAN tvStatus.text DIHAPUS
 
         // Menampilkan Poster menggunakan Glide
         if (!currentEvent.posterUrl.isNullOrEmpty()) {
@@ -54,25 +54,24 @@ class EventAdapter(
             holder.ivPoster.setImageResource(R.drawable.fight)
         }
 
-        // LOGIKA STATUS DAN WARNA DIHAPUS, SEHINGGA tvStatus AKAN SELALU MENGAMBIL NILAI DEFAULT DARI XML (visibility=GONE)
-        /*
-        currentEvent.status?.let { status ->
-            holder.tvStatus.visibility = View.VISIBLE
-            holder.tvStatus.text = status.uppercase() // Baris ini dihapus
-            when (status.lowercase()) {
-                "upcoming" -> holder.tvStatus.setBackgroundColor(Color.parseColor("#FF9800")) // Orange
-                "pending" -> holder.tvStatus.setBackgroundColor(Color.parseColor("#2196F3")) // Blue
-                "history", "done" -> holder.tvStatus.setBackgroundColor(Color.parseColor("#4CAF50")) // Green
-                else -> holder.tvStatus.visibility = View.GONE
+        // --- LOGIKA POP-UP MENU UNTUK btnAction ---
+        holder.btnAction.setOnClickListener {
+            val popup = PopupMenu(context, holder.btnAction)
+            popup.menuInflater.inflate(R.menu.menu_event_action, popup.menu)
+
+            popup.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_edit -> listener.onEditClick(currentEvent)
+                    R.id.action_delete -> listener.onDeleteClick(currentEvent)
+                    // Aksi lain yang didelegasikan ke Fragment
+                    else -> listener.onDetailActionClick(currentEvent, menuItem.itemId)
+                }
+                true
             }
-        } ?: run {
-            holder.tvStatus.visibility = View.GONE
+            popup.show()
         }
-        */
 
-
-        holder.btnAction.setOnClickListener { onActionClick(currentEvent) }
-        holder.btnInfo.setOnClickListener { onInfoClick(currentEvent) }
+        holder.btnInfo.setOnClickListener { listener.onInfoClick(currentEvent) }
     }
 
     override fun getItemCount(): Int {
