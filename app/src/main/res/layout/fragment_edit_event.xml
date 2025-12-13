@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".event.EditEventFragment">
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scroll_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/button_container"
+        android:paddingBottom="8dp" > <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
         <ImageButton
             android:id="@+id/btn_back_edit"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_back"
             android:contentDescription="Back"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="12dp"
             app:tint="@android:color/holo_red_dark" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="EDIT EVENT PAGE"
-            android:textSize="28sp"
+            android:textSize="24sp"
             android:textStyle="bold|italic"
             android:textColor="@android:color/black"
-            android:layout_marginBottom="32dp"/>
+            android:layout_marginBottom="24dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,8 +51,8 @@
             android:layout_height="wrap_content"
             android:hint="Halloween Karaoke Part 2025"
             android:inputType="text"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_edittext_rounded"/>
 
         <TextView
@@ -53,13 +61,12 @@
             android:text="Status"
             android:textStyle="bold"
             android:layout_marginBottom="4dp"/>
-
         <Spinner
             android:id="@+id/sp_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_edittext_rounded"/>
 
 
@@ -77,8 +84,8 @@
             android:inputType="textMultiLine"
             android:lines="3"
             android:gravity="top"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_edittext_rounded"/>
 
         <TextView
@@ -93,8 +100,8 @@
             android:layout_height="wrap_content"
             android:hint="50.000"
             android:inputType="text"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_edittext_rounded"/>
 
         <TextView
@@ -106,7 +113,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_edittext_rounded">
 
             <EditText
@@ -118,8 +125,8 @@
                 android:paddingStart="12dp"
                 android:paddingEnd="48dp"
                 android:background="@android:color/transparent"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 tools:ignore="RtlSymmetry" />
 
             <ImageView
@@ -158,8 +165,8 @@
                 android:paddingStart="12dp"
                 android:paddingEnd="48dp"
                 android:background="@android:color/transparent"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 tools:ignore="RtlSymmetry" />
 
             <ImageView
@@ -175,35 +182,41 @@
                 app:tint="@android:color/holo_orange_dark" />
         </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="24dp">
-
-            <Button
-                android:id="@+id/btn_save_event"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Save"
-                android:backgroundTint="@android:color/holo_orange_dark"
-                android:textColor="@android:color/white"
-                android:layout_marginEnd="8dp"
-                android:padding="12dp"/>
-
-            <Button
-                android:id="@+id/btn_cancel"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Cancel"
-                android:backgroundTint="@android:color/holo_red_dark"
-                android:textColor="@android:color/white"
-                android:layout_marginStart="8dp"
-                android:padding="12dp"/>
-        </LinearLayout>
-
     </LinearLayout>
-</ScrollView>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:padding="16dp"
+        android:background="@android:color/white"
+        android:elevation="8dp">
+
+        <Button
+            android:id="@+id/btn_save_event"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            android:textColor="@android:color/white"
+            android:layout_marginEnd="8dp"
+            android:padding="12dp"/>
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="8dp"
+            android:padding="12dp"/>
+    </LinearLayout>
+
+</RelativeLayout>
