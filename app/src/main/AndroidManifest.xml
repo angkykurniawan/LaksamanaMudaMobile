@@ -23,7 +23,7 @@
             android:name=".autentikasi.ResetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".bottombar.BottomNavigationView"
+            android:name=".autentikasi.ResetPasswordRequestActivity"
             android:exported="false" />
         <activity
             android:name=".SplashScreen"
@@ -38,7 +38,7 @@
             android:name=".MainActivity"
             android:exported="true" />
         <activity
-            android:name=".autentikasi.ResetPasswordRequestActivity"
+            android:name=".bottombar.BottomNavigationView"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
